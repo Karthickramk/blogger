@@ -1,0 +1,6 @@
+com/cisco/blogger/dao/BlogDao.class
+com/cisco/blogger/model/Blog.class
+com/cisco/blogger/model/User.class
+com/cisco/blogger/model/BlogComment.class
+com/cisco/blogger/vertx/BlogVerticle.class
+com/cisco/blogger/vertx/DatabaseVerticle.class
