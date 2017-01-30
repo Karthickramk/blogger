@@ -61,7 +61,7 @@ public class DatabaseVerticle extends AbstractVerticle {
 			message.reply(Json.encodePrettily(blogs));
 			System.out.println("encoded");
 		});
-		vertx.eventBus().consumer("com.cisco.blogger.getBlogByTag", message -> {
+		vertx.eventBus().consumer("com.cisco.blogger.getBlogsByTag", message -> {
 			List<Blog> blogs = dao.getAllBlogsByTag(message.body().toString());
 			message.reply(Json.encodePrettily(blogs));
 			System.out.println("encoded");

@@ -11,7 +11,7 @@
 	<hr />
 	<a href='new.html'>New Post</a> |
 	<input id="search_input" type="text"/>
-	<a href='' id="search">Search Blog</a> | Invite
+	<a href='#' id="search">Search Blog</a> | Invite
 	<input placeholder="email1, email2, email3"> |
 	<a href='profile.html'>Krishna Mohan Koyya </a>|
 	<a href='index.html'>Logout</a>
@@ -67,14 +67,15 @@ $(document).ready(function() {
 	        });
 		}
 	});
-	$("#search").click(){
-		var tag = $("#search_input").val();
+	$("#search").click(function() {
+		var tag = 'http://localhost:8080/api/tag/blog/'+$("#search_input").val();
+		$("#blogContent").html("");
+		alert(tag)
 		$.ajax({
-			url : 'http://localhost:8080/api/blog/'+tag,
+			url : tag,
 			type : 'get',
 			accept : 'application/json',
 			success : function(data) {
-				window.location="search.html";
 				$.each(data, function(index) {
 					html = "<div><h2><span>"+data[index].title+"</span> <span>"+new Date(data[index].createdDate)+"</span></h2>"+
 							"<p>"+data[index].blogContent+"</p> Leave a comment: <textarea id='"+index+"'></textarea>"+
@@ -87,7 +88,7 @@ $(document).ready(function() {
 		        });
 			}
 		});
-	}
+	});
 });
 </script>
 </body>
