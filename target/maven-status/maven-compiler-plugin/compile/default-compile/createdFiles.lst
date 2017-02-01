@@ -1,6 +1,10 @@
 com/cisco/blogger/dao/BlogDao.class
+com/cisco/blogger/vertx/BloggerMain.class
+com/cisco/blogger/dao/UserDao.class
+com/cisco/blogger/model/LoggedInUser.class
 com/cisco/blogger/model/Blog.class
 com/cisco/blogger/model/User.class
 com/cisco/blogger/model/BlogComment.class
+com/cisco/blogger/config/ApplicationConfiguration.class
 com/cisco/blogger/vertx/BlogVerticle.class
 com/cisco/blogger/vertx/DatabaseVerticle.class

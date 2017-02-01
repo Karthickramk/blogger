@@ -3,11 +3,13 @@ package com.cisco.blogger.model;
 import java.util.Date;
 import java.util.List;
 
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+@Entity
 public class Blog {
 	@Id
-	private String _id;
+	private String id;
 	private String title;
 	private String blogContent;
 	private List<BlogComment> comments;
@@ -57,10 +59,11 @@ public class Blog {
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String get_id() {
-		return _id;
+	public String getId() {
+		return id;
 	}
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setId(String id) {
+		this.id = id;
 	}
+	
 }

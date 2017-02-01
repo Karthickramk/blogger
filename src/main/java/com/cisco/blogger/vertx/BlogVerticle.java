@@ -5,15 +5,30 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.Session;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+
+
+import com.cisco.blogger.model.LoggedInUser;
+
 public class BlogVerticle extends AbstractVerticle {
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	public BlogVerticle(ApplicationContext context) {
+	}
 
 	@Override
 	public void start(Future<Void> future) throws Exception {
-		System.out.println("starting...");
+		logger.info("starting...");
 		Router router = Router.router(vertx);
 		vertx.deployVerticle("com.cisco.blogger.vertx.DatabaseVerticle", new DeploymentOptions().setWorker(true));
 		router.route("/about").handler(rctx -> {
@@ -22,6 +37,17 @@ public class BlogVerticle extends AbstractVerticle {
 					.end("<h1>Hello from my first Vert.x 3 application via routers</h1>");
 		});
 		router.route("/static/*").handler(StaticHandler.create("web"));
+		router.route("/api/login").handler(BodyHandler.create());
+		router.post("/api/login").handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.login", rctx.getBodyAsJson(), r -> {
+				Session session = rctx.session();
+				  // Put some data from the session
+				  session.put("username", rctx.getBodyAsJson().getString("uname"));
+				  session.put("token", r.result().body().toString());
+				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
+				.end(r.result().body().toString());
+			});
+		});
 		router.get("/api/blog/:title").handler(rctx -> {
 			String title = rctx.request().getParam("title");
 			vertx.eventBus().send("com.cisco.blogger.getBlogByTitle", title, r -> {
@@ -70,6 +96,39 @@ public class BlogVerticle extends AbstractVerticle {
 				.end(r.result().body().toString());
 			});
 		});
+		
+		router.get("/api/users").handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.user.list","", r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+		
+		router.get("/api/user/info/:username").handler(rctx -> {
+			String userName = rctx.request().getParam("username");
+			vertx.eventBus().send("com.cisco.blogger.user.get",userName, r -> {
+				rctx.response().setStatusCode(200).end(r.result().body().toString());
+			});
+		});
+		
+		router.get("/my-pretty-notfound-handler").handler(ctx -> {
+			  ctx.response()
+			          .setStatusCode(404)
+			          .end("NOT FOUND fancy html here!!!");
+		});
+		router.route("/api/resgister").handler(BodyHandler.create());
+		router.post("/api/resgister").handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.user.resgister", rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
+				.end(r.result().body().toString());
+			});
+		});
+		router.get().failureHandler(ctx -> {
+		  if (ctx.statusCode() == 404) {
+		    ctx.reroute("/my-pretty-notfound-handler");
+		  } else {
+		    ctx.next();
+		  }
+		});
 		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
@@ -77,12 +136,12 @@ public class BlogVerticle extends AbstractVerticle {
 					} else {
 						future.fail(result.cause());
 					}
-				});
+		});
 	}
 
 	@Override
 	public void stop() throws Exception {
-		System.out.println("stopping...");
+		logger.info("stopping...");
 		super.stop();
 	}
 }

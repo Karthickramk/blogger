@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<link rel='stylesheet' href='css/blog.css'>
 <meta charset="ISO-8859-1">
-<title>r.e.n.d.e.z.v.o.u.s</title>
+<title>Blog</title>
 </head>
 <body>
-	<h1>r.e.n.d.e.z.v.o.u.s</h1>
+	<h1>Blog</h1>
 	<hr />
 	Login Required!<br/><br/>
-	User Name <input> Password <input> <a href='home.html'>Login</a> <br/><br/>
+	User Name <input type="text" id="uname"> 
+	Password <input type="password" id="pwd"> 
+	<input type="button" id="login" value="Login"/> <br/><br/>
 	 Not registered yet? <a href='register.html'>Register</a>
 </body>
+<script>
+$(document).ready(function() {
+    $('#login').click(function() {
+		 var data = {};
+	     data["uname"] = $("#uname").val();
+	     data["pwd"] = $("#pwd").val();
+		$.ajax({
+			url : 'http://localhost:8080/api/login',
+			type : 'POST',
+			data: JSON.stringify(data),
+			accepts: {
+		        text: "application/json"
+		    }
+		}).done(function( msg ) {
+			alert(msg);
+				window.location="home.html";
+		  });
+	});
+});
+</script>
 </html>

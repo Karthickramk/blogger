@@ -3,45 +3,80 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>r.e.n.d.e.z.v.o.u.s</title>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<link rel='stylesheet' href='css/blog.css'>
 </head>
 <body>
 	<h1>r.e.n.d.e.z.v.o.u.s</h1>
 	<hr />
 	<h2>Register Yourself!</h2>
+	<form id="register">
 	<table>
 		<tr>
-			<td>Name</td>
-			<td><input></td>
+			<td>First Name</td>
+			<td><input id="firstName"></td>
+		</tr>
+		<tr>
+			<td>Last Name</td>
+			<td><input id="lastName"></td>
 		</tr>
 		<tr>
 			<td>User Name</td>
-			<td><input></td>
+			<td><input id="userName"></td>
 		</tr>
 		<tr>
 			<td>Password</td>
-			<td><input type='password'></td>
+			<td><input type='password' id="password"></td>
 		</tr>
 		<tr>
 			<td>Confirm Password</td>
-			<td><input></td>
+			<td><input type="password" id="confirm_password"></td>
 		</tr>
 		<tr>
 			<td>Email</td>
-			<td><input></td>
+			<td><input id="email"></td>
 		</tr>
 		<tr>
 			<td>Phone Number</td>
-			<td><input></td>
+			<td><input id="phoneNumber"></td>
 		</tr>
 		<tr>
 			<td>Areas of Interest</td>
-			<td><select><option>Technology</option>
+			<td><select name="areaOfInterest"><option>Technology</option>
 					<option>Movies</option>
 					<option>Sports</option></select></td>
 		</tr>
 		<tr>
-			<td><a href='index.html'>Register</a> | <a href='index.html'>Cancel</a></td>
+			<td><input type="button"id="register" value="Register"/> | <a href='#'>Cancel</a></td>
 		</tr>
 	</table>
+	</form>
 </body>
+<script>
+
+$(document).ready(function(){
+    $("#register").click(function(){
+    	var data = {};
+    	$.each($("#register").serializeArray(), function(_, key) {
+  		  if (data.hasOwnProperty(kv.name)) {
+  			data[key.id] = $.makeArray(data[key.id]);
+  			data[key.id].push(key.value);
+  		  }
+  		  else {
+  			data[key.id] = key.value;
+  		  }
+  		});
+    	
+    	$.ajax({
+            url: '/api/register',
+            type: 'post',
+            dataType: 'application/json',
+            success: function (data) {
+                $('#target').html(data);
+            },
+            data: JSON.stringify(data)
+        });
+    });
+});
+</script>
 </html>
