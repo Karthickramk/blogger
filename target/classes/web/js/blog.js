@@ -6,7 +6,7 @@ $(document).ready(function() {
 	     data["blogContent"] = $("#post").val();
 	     data["tags"] = tags;
 		$.ajax({
-			url : 'http://localhost:8080/api/blog',
+			url : '/api/blog',
 			type : 'POST',
 			data: JSON.stringify(data),
 			accepts: {

@@ -40,6 +40,8 @@ public class User {
 	
 	private List<Blog> favouriteBlogs;
 	
+	private List<String> interest;
+	
 	public User() {};
 	
 	public User(String userName, String password, String firstName, String email) {
@@ -91,6 +93,14 @@ public class User {
 
 	public void setFavouriteBlogs(List<Blog> favouriteBlogs) {
 		this.favouriteBlogs = favouriteBlogs;
+	}
+
+	public List<String> getInterest() {
+		return interest;
+	}
+
+	public void setInterest(List<String> interest) {
+		this.interest = interest;
 	}
 
 	@Override

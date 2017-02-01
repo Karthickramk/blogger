@@ -5,19 +5,14 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.Session;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-
-
-import com.cisco.blogger.model.LoggedInUser;
 
 public class BlogVerticle extends AbstractVerticle {
 
@@ -115,9 +110,9 @@ public class BlogVerticle extends AbstractVerticle {
 			          .setStatusCode(404)
 			          .end("NOT FOUND fancy html here!!!");
 		});
-		router.route("/api/resgister").handler(BodyHandler.create());
-		router.post("/api/resgister").handler(rctx -> {
-			vertx.eventBus().send("com.cisco.blogger.user.resgister", rctx.getBodyAsJson(), r -> {
+		router.route("/api/register").handler(BodyHandler.create());
+		router.post("/api/register").handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.user.register", rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());
 			});

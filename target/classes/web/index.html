@@ -22,7 +22,7 @@ $(document).ready(function() {
 	     data["uname"] = $("#uname").val();
 	     data["pwd"] = $("#pwd").val();
 		$.ajax({
-			url : 'http://localhost:8080/api/login',
+			url : '/api/login',
 			type : 'POST',
 			data: JSON.stringify(data),
 			accepts: {

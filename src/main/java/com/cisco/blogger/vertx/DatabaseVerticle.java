@@ -91,7 +91,7 @@ public class DatabaseVerticle extends AbstractVerticle {
 			logger.info("encoded");
 		});
 		
-		vertx.eventBus().consumer("com.cisco.blogger.user.resgister", message -> {
+		vertx.eventBus().consumer("com.cisco.blogger.user.register", message -> {
 			User userObj = Json.decodeValue(message.body().toString(), User.class);
 			logger.info("User object "+userObj);
 			

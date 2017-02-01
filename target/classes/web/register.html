@@ -2,52 +2,53 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>r.e.n.d.e.z.v.o.u.s</title>
+<title>Blog</title>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <link rel='stylesheet' href='css/blog.css'>
 </head>
 <body>
-	<h1>r.e.n.d.e.z.v.o.u.s</h1>
+	<h1>Blog</h1>
 	<hr />
 	<h2>Register Yourself!</h2>
-	<form id="register">
+	<form id="registerForm">
 	<table>
 		<tr>
 			<td>First Name</td>
-			<td><input id="firstName"></td>
+			<td><input name="firstName"></td>
 		</tr>
 		<tr>
 			<td>Last Name</td>
-			<td><input id="lastName"></td>
+			<td><input name="lastName"></td>
 		</tr>
 		<tr>
 			<td>User Name</td>
-			<td><input id="userName"></td>
+			<td><input name="userName"></td>
 		</tr>
 		<tr>
 			<td>Password</td>
-			<td><input type='password' id="password"></td>
+			<td><input type='password' name="password"></td>
 		</tr>
 		<tr>
 			<td>Confirm Password</td>
-			<td><input type="password" id="confirm_password"></td>
+			<td><input type="password" name="confirm_password"></td>
 		</tr>
 		<tr>
 			<td>Email</td>
-			<td><input id="email"></td>
+			<td><input name="email"></td>
 		</tr>
 		<tr>
 			<td>Phone Number</td>
-			<td><input id="phoneNumber"></td>
+			<td><input name="phoneNumber" maxlength="10"></td>
 		</tr>
 		<tr>
 			<td>Areas of Interest</td>
-			<td><select name="areaOfInterest"><option>Technology</option>
+			<td><select name="interest" multiple>
+					<option>Technology</option>
 					<option>Movies</option>
 					<option>Sports</option></select></td>
 		</tr>
 		<tr>
-			<td><input type="button"id="register" value="Register"/> | <a href='#'>Cancel</a></td>
+			<td><input type="button" id="register" value="Register"/> | <a href='#'>Cancel</a></td>
 		</tr>
 	</table>
 	</form>
@@ -57,14 +58,16 @@
 $(document).ready(function(){
     $("#register").click(function(){
     	var data = {};
-    	$.each($("#register").serializeArray(), function(_, key) {
-  		  if (data.hasOwnProperty(kv.name)) {
-  			data[key.id] = $.makeArray(data[key.id]);
-  			data[key.id].push(key.value);
+    	$.each($("#registerForm").serializeArray(), function(_, key) {
+  		 if(key.name != 'confirm_password'){
+    	 if (data.hasOwnProperty(key.name)) {
+  			data[key.name] = $.makeArray(data[key.name]);
+  			data[key.name].push(key.value);
   		  }
   		  else {
-  			data[key.id] = key.value;
+  			data[key.name] = key.value;
   		  }
+  		 }
   		});
     	
     	$.ajax({
