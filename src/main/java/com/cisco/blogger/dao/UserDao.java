@@ -30,6 +30,7 @@ public class UserDao extends BasicDAO<User, Integer> {
 	};
 	
 	public boolean createUser(User user) {
+		logger.info("creating user");
 		boolean isSuccess = false;
 		if(isUserIdAvailable(user.getUserName())) {
 			save(user);

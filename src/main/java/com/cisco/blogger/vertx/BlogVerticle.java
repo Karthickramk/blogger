@@ -13,7 +13,10 @@ import io.vertx.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-
+/*
+ * This class is for Blog verticle
+ * 
+ */
 public class BlogVerticle extends AbstractVerticle {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
