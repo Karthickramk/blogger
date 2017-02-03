@@ -1,0 +1,16 @@
+[2017-02-03 15:59:32,787]  INFO AnnotationConfigApplicationContext:582 - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@64bf3bbf: startup date [Fri Feb 03 15:59:32 IST 2017]; root of context hierarchy
+[2017-02-03 15:59:33,263]  INFO cluster:71 - Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+[2017-02-03 15:59:33,359]  INFO connection:71 - Opened connection [connectionId{localValue:1, serverValue:6}] to localhost:27017
+[2017-02-03 15:59:33,361]  INFO cluster:71 - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[3, 4, 1]}, minWireVersion=0, maxWireVersion=5, maxDocumentSize=16777216, roundTripTimeNanos=616394}
+[2017-02-03 15:59:33,413]  INFO Version:30 - HV000001: Hibernate Validator null
+[2017-02-03 15:59:33,497]  INFO BlogVerticle:26 - starting...
+[2017-02-03 16:00:06,783]  INFO UserDao:33 - creating user
+[2017-02-03 16:00:06,812]  INFO connection:71 - Opened connection [connectionId{localValue:2, serverValue:7}] to localhost:27017
+[2017-02-03 16:00:06,838]  INFO DatabaseVerticle:75 - {
+  "firstName" : "karthick",
+  "lastName" : "p",
+  "userName" : "karthick1",
+  "password" : "password1",
+  "email" : "kpitchia@cisco.com",
+  "phoneNumber" : "232324223"
+}

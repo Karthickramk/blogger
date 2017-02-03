@@ -13,10 +13,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-/*
- * This class is for Blog verticle
- * 
- */
+
 public class BlogVerticle extends AbstractVerticle {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -35,13 +32,19 @@ public class BlogVerticle extends AbstractVerticle {
 					.end("<h1>Hello from my first Vert.x 3 application via routers</h1>");
 		});
 		router.route("/static/*").handler(StaticHandler.create("web"));
-		router.route("/api/login").handler(BodyHandler.create());
+		router.route("/api/*").handler(BodyHandler.create());
+		/** Register a user **/
+		router.post("/api/register").handler(rctx -> {
+			vertx.eventBus().send("com.cisco.blogger.register", rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
+				.end(r.result().body().toString());
+			});
+		});
+		/** User Login **/
 		router.post("/api/login").handler(rctx -> {
-			vertx.eventBus().send("com.cisco.blogger.login", rctx.getBodyAsJson(), r -> {
-				Session session = rctx.session();
-				  // Put some data from the session
-				  session.put("username", rctx.getBodyAsJson().getString("uname"));
-				  session.put("token", r.result().body().toString());
+			vertx.eventBus().send("com.cisco.user.login", rctx.getBodyAsJson(), r -> {
+				// Put some data from the session
+
 				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());
 			});
@@ -115,6 +118,7 @@ public class BlogVerticle extends AbstractVerticle {
 		});
 		router.route("/api/register").handler(BodyHandler.create());
 		router.post("/api/register").handler(rctx -> {
+			System.out.println("Registration request received.");
 			vertx.eventBus().send("com.cisco.blogger.user.register", rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());

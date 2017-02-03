@@ -2,6 +2,10 @@ package com.cisco.blogger.vertx;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTOptions;
+import io.vertx.ext.auth.jwt.impl.JWT;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +37,8 @@ public class DatabaseVerticle extends AbstractVerticle {
 	
 	@Autowired
 	private Validator validator;
+	JsonObject config;
+	JWTAuth provider;
 	
 	public DatabaseVerticle(ApplicationContext context) {
 		blogDao = (BlogDao) context.getBean("blogDao");
@@ -43,6 +49,12 @@ public class DatabaseVerticle extends AbstractVerticle {
 	}
 	@Override
 	public void start() throws Exception {
+		config = new JsonObject().put("keyStore", new JsonObject()
+			    .put("path", "keystore.jceks")
+			    .put("type", "jceks")
+			    .put("password", "secret"));
+		 provider = JWTAuth.create(vertx, config);
+
 		vertx.eventBus().consumer("com.cisco.blogger.getBlogByTitle", message -> {
 			Blog blog = blogDao.getBlogByTitle(message.body().toString());
 			logger.info(Json.encodePrettily(blog));
@@ -55,6 +67,13 @@ public class DatabaseVerticle extends AbstractVerticle {
 			blogDao.addBlog(blog);
 			logger.info(Json.encodePrettily(blog));
 			message.reply(Json.encodePrettily(blog));
+		});
+		vertx.eventBus().consumer("com.cisco.blogger.register", message -> {
+			User user = Json.decodeValue(message.body().toString(), User.class);
+			System.out.println(user.toString());
+			boolean isusercreated = userDao.createUser(user);
+			logger.info(Json.encodePrettily(user));
+			message.reply(isusercreated);
 		});
 		vertx.eventBus().consumer("com.cisco.blogger.update", message -> {
 			Blog blog = Json.decodeValue(message.body().toString(), Blog.class);
@@ -135,10 +154,53 @@ public class DatabaseVerticle extends AbstractVerticle {
 			message.reply(Json.encodePrettily(users));
 		});
 		
+		/** Logging in **/
 		vertx.eventBus().consumer("com.cisco.blogger.login",message -> {
-			LoggedInUser user = new LoggedInUser("asdsad","asdsads");
-			logger.info(Json.encodePrettily(user));
-			message.reply(Json.encodePrettily(user));
+			User userObj = Json.decodeValue(message.body().toString(), User.class);
+			System.out.println(userObj.toString());
+			Optional<User> userOptional = userDao.getUserById(userObj.getUserName());
+			boolean loginStatus = false;
+			User user = null;
+			System.out.println("userOptional-->"+userOptional);
+			if(userOptional.isPresent()) {
+				user = userOptional.get();
+				System.out.print(user.toString());
+				if (user.getPassword().equals(userObj.getPassword())) {
+					
+					loginStatus=true;
+					System.out.println("loginstatus"+loginStatus);
+				}	
+			}
+			if (loginStatus) {
+				String token = provider.generateToken(new JsonObject().put("sub", userObj.getUserName()), new JWTOptions());
+				System.out.println("token-->" + token);
+				
+				/*try {
+				    JWT jwt = JWT.decode(token);
+				} catch (JWTDecodeException exception){
+				    //Invalid token
+				}
+				JsonObject authInfo = new JsonObject()
+					      .put("jwt", token);
+				
+				 * Provider.authenticate(authInfo, res -> {
+      				if (res.failed()) {
+				        res.cause().printStackTrace();
+				        fail();
+				     }
+				     System.out.println(res.result());
+				     testComplete();
+				  });
+				  await();
+				 */
+				//logger.info(Json.encodePrettily(user));
+				message.reply(Json.encodePrettily(token));
+			} else {
+				System.out.println("loginstatus"+loginStatus);
+
+				message.reply(loginStatus);
+			}
+			
 		});
 		
 	}

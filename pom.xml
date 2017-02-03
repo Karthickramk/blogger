@@ -94,6 +94,18 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
+				<!-- Added by Partha -->
+				<dependency>
+  			<groupId>io.vertx</groupId>
+ 			 <artifactId>vertx-auth-jwt</artifactId>
+  			<version>3.3.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>io.jsonwebtoken</groupId>
+   			 <artifactId>jjwt</artifactId>
+    		<version>0.7.0</version>
+		</dependency>
+		<!-- Added by Partha -->
 	</dependencies>
 	<build>
 		<plugins>

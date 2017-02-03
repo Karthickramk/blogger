@@ -18,6 +18,7 @@ public class BloggerMain {
 		
 		vertx.deployVerticle(new BlogVerticle(context));
 		vertx.deployVerticle(new DatabaseVerticle(context), new DeploymentOptions().setWorker(true));
+		vertx.deployVerticle(new UserVerticle(context), new DeploymentOptions().setWorker(true));
 		
 	}
 
