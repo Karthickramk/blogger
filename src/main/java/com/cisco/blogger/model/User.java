@@ -38,17 +38,24 @@ public class User {
 	@Pattern(regexp="(^$|[0-9]{10})",message="{user.phonenumber}")
 	private String phoneNumber;
 	
-	private List<Blog> favouriteBlogs;
+	//private List<Blog> favouriteBlogs;
 	
-	private List<String> interest;
+	//private List<String> interest;
 	
 	public User() {};
 	
-	public User(String userName, String password, String firstName, String email) {
+	public User(String userName,String password) {
+		this.userName =userName;
+		this.password = password;
+	}
+	
+	public User(String userName, String password, String firstName, String lastName, String email, String phoneNumber) {
+		this.lastName = lastName;
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
 		this.email = email;
+		this.phoneNumber = phoneNumber;
 	}
 	
 	public String getFirstName() {
@@ -87,7 +94,7 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public List<Blog> getFavouriteBlogs() {
+	/*public List<Blog> getFavouriteBlogs() {
 		return favouriteBlogs;
 	}
 
@@ -101,7 +108,7 @@ public class User {
 
 	public void setInterest(List<String> interest) {
 		this.interest = interest;
-	}
+	}*/
 
 	@Override
 	public String toString() {
