@@ -11,10 +11,11 @@ $(document).ready(function() {
 			data: JSON.stringify(data),
 			accepts: {
 		        text: "application/json"
-		    }
-		}).done(function( msg ) {
+		    },
+			success:function( msg ) {
 				window.location="home.html";
-		  });
+			}
+		});
 	});
      $('#cancel').click(function() {
     	 window.location="home.html";

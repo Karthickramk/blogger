@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.cisco.blogger.model.Blog;
+import com.cisco.blogger.model.Message;
 import com.cisco.blogger.model.User;
 import com.mongodb.MongoClient;
 
@@ -32,7 +33,7 @@ public class ApplicationConfiguration {
 	@Bean(name="datastore")
 	@Autowired
 	public Datastore getDataStore() {
-		Datastore store = getMorphia().createDatastore(getMongoClient(), "cisco_blogger1");
+		Datastore store = getMorphia().createDatastore(getMongoClient(), "cisco_blogger3");
 		return store;
 	}
 	
@@ -56,6 +57,11 @@ public class ApplicationConfiguration {
 	@Bean
 	public Class<Blog> getBlogClass() {
 		return Blog.class;
+	}
+	
+	@Bean
+	public Class<Message> getMessageClass() {
+		return Message.class;
 	}
 	
 }

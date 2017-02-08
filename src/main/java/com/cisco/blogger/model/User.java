@@ -2,7 +2,6 @@ package com.cisco.blogger.model;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -17,18 +16,15 @@ public class User {
 	@Id
 	private String id;
 	
-	@NotNull
 	@NotEmpty(message="{NotEmpty.user.name}")
 	private String firstName;
 	
 	private String lastName;
 	
-	@NotNull
 	@NotEmpty
-	@Size(min=6,message="{Size.user.username}")
+	@Size(min=5,message="{Size.user.username}")
 	private String userName;
 	
-	@NotNull
 	@NotEmpty(message="{NotEmpty.user.password}")
 	private String password;
 	
@@ -38,9 +34,9 @@ public class User {
 	@Pattern(regexp="(^$|[0-9]{10})",message="{user.phonenumber}")
 	private String phoneNumber;
 	
-	//private List<Blog> favouriteBlogs;
+	private List<Blog> favouriteBlogs;
 	
-	//private List<String> interest;
+	private List<String> interest;
 	
 	public User() {};
 	
@@ -94,7 +90,7 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	/*public List<Blog> getFavouriteBlogs() {
+	public List<Blog> getFavouriteBlogs() {
 		return favouriteBlogs;
 	}
 
@@ -108,7 +104,7 @@ public class User {
 
 	public void setInterest(List<String> interest) {
 		this.interest = interest;
-	}*/
+	}
 
 	@Override
 	public String toString() {

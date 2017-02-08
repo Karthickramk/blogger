@@ -1,0 +1,107 @@
+form td, form th {
+    vertical-align : middle;
+}
+
+.content {
+    position            : relative;
+    width               : 940px;
+    height              : 300px;
+    margin              : 32px auto;
+    background-repeat   : no-repeat;
+    background-position : top left;
+    -webkit-box-shadow  : 0px 0px 15px rgba(0,0,0,0.15);
+       -moz-box-shadow  : 0px 0px 15px rgba(0,0,0,0.15);
+            box-shadow  : 0px 0px 15px rgba(0,0,0,0.15);
+       -pie-box-shadow  : 0px 0px 15px #ddd;
+    behavior : url(/PIE.htc);
+}
+
+.content .vertical-form {
+    position       : absolute;
+    right          : 0;
+    top            : 0;
+    bottom         : 0;
+    width          : 280px;
+}
+
+.content .vertical-form table {
+    margin : 32px auto;
+}
+
+.content .banner {
+    position    : absolute;
+    top         : 0px;
+    left        : 0px;
+    right       : 311px;
+    color       : #eee;
+    padding     : 8px 15px;
+    margin      : 0;
+    overflow    : auto;
+    white-space : pre-wrap;
+    max-height  : 284px;
+    line-height : 13px;
+}
+
+.content .banner-background {
+    position   : absolute;
+    background : #222;
+    top        : 0px;
+    bottom     : 0px;
+    left       : 0px;
+    right      : 0px;
+    opacity    : 0.95;
+    filter     : alpha(opacity=95);
+}
+
+.header {
+    margin   : 32px auto 16px;
+    position : relative;
+    width    : 940px;
+    height   : 48px;
+}
+
+.header .logo {
+    position : absolute;
+    top      : 0;
+    left     : 0;
+}
+
+.header .contact {
+    position    : absolute;
+    top         : 4px;
+    right       : 0;
+    line-height : 16px;
+    text-align  : right;
+    color       : #777;
+}
+
+.footer {
+    position    : fixed;
+    left        : 0;
+    right       : 0;
+    bottom      : 0;
+    height      : 32px;
+    line-height : 32px;
+    background  : #FFFFFF;
+}
+
+.footer .copyright {
+	font-family :"arial";
+	font-size	:"11px";
+	color		:#39393B;
+	text-align	:center;
+    margin      : 0 auto;
+    line-height : 32px;
+    width       : 940px;
+    filter     : alpha(opacity=75);
+}
+.errorDiv {
+    background-color: #F3F6F9;
+    color: #FF0000;
+    font-family: arial;
+    font-size: 12px;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: left;
+    width: 500px;
+}

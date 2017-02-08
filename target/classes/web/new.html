@@ -2,55 +2,51 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Blogs</title>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script type="text/javascript" src='js/blog.js'></script>
+<title>Blogger</title>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/message.js"></script>
+<script src="js/common.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/tags.js"></script>
+
+<link rel="stylesheet" href="css/jquery-ui.min.css">
 <link rel='stylesheet' href='css/blog.css'>
 </head>
 <body>
 	<h1>Blogs</h1>
 	<hr />
+	<a href='home.html'>Home</a> |
 	<a href='new.html'>New Post</a> |
-	<input>
-	<a href='search.html'>Search Blog</a> | Invite
-	<input placeholder="email1, email2, email3"> |
-	<a href='profile.html'>Krishna Mohan Koyya </a>|
+	<input id="search_input" type="text"/>
+	<a href='#' id="search">Search Blog</a> | Invite
+	<input id='invite_id' placeholder="email1, email2, email3"> <input type='button' value="Invite" style="cursor: pointer;height: 25px;width: 70px;" onclick="invite()">|
+	<a href='profile.html' id='username'></a>|
 	<a href='index.html'>Logout</a>
 	<hr />
-	<table>
+	<table  class='root'>
 		<tr>
 			<td width="20%" valign="top">
 				<h2>Favorite Posts</h2>
 				<ul>
-					<li><a href='home.html'>asdkjf saddflkj</a></li>
-					<li><a href='home.html'>oioi oioi</a></li>
-					<li><a href='home.html'>mkkjvnch sdf</a></li>
-					<li><a href='home.html'>zxc zxv zcxcv</a></li>
+					<div id="favBlogs"></div>
 				</ul>
 			</td>
 			<td valign="top" width='50%'>
 				<h2>New Post</h2>
 				<p>Title <input placeholder='title' id="title" value=""></p>
 				<p>Tags <input placeholder='tags' id="tags" value=""></p>
-				Post<br/><textarea rows="20" cols="80" id="post" value=""></textarea><br/>
-				<input type="button"  id="save" value="Save"/> | <input type="button"  id="cancel" value="Cancel"/>
+				Post<br/><textarea rows="20" cols="80" id="post" value=""></textarea><br/><br/>
+				<a id="save" href="javascript:createBlog();" class="loginButton">Save</a> 
+				<a id="cancel" href="javascript:cancel();" class="loginButton">Cancel</a>
 			</td>
 			<td width="30%" valign="top">
 				<h2>Messages</h2>
-				<p>
-					<u>krishna | 31 DEC 2016 3.45PM</u><br />asdf adlfkajsf
-					asfllsdakfjsdad faslfdjasdfasf sdfllsdakfjs df
-				</p>
-				<p>
-					<u>krishna | 31 DEC 2016 3.45PM</u><br />asdf adlfkajsf
-					asfllsdakfjsdad faslfdjasdfasf sdfllsdakfjs df
-				</p>
-				<p>
-					<u>mohan | 30 DEC 2016 3.45PM</u><br />asdf adlfkajsf
-					asfllsdakfjsdad faslfdjasdfasf sdfllsdakfjs df
-				</p>
-				<hr /> <textarea></textarea><br />
-				<button>Post Message</button>
+				<div id="messageContainer">
+				</div>
+				<hr /> <br />
+				<textarea id="message" rows="10" cols="50"></textarea><br /><br />
+				<a id="postMessage" href="javascript:postMessage();" class="loginButton">Post Message</a>
 			</td>
 		</tr>
 	</table>

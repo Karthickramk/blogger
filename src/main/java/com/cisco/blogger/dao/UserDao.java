@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.dao.BasicDAO;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ public class UserDao extends BasicDAO<User, Integer> {
 		super(entityClass, ds);
 	}
 	
+	@Override
 	public Key<User> save(User entity) {
 		Key<User> save = super.save(entity);
 		return null;
@@ -78,6 +81,16 @@ public class UserDao extends BasicDAO<User, Integer> {
 
 	public boolean isValid(String userName, String password) {
 		return createQuery().field("userName").equal(userName).field("password").equal(password).count()==1;
+	}
+
+	public void updateUser(User user) {
+		Query<User> query = createQuery().field("userName").equal(user.getUserName());
+		logger.info("Found user with name ["+user.getUserName()+"] as "+query.get());
+		UpdateOperations<User> ops = createUpdateOperations().set("firstName", user.getFirstName()).
+				set("lastName", user.getLastName()).set("password", user.getPassword()).
+				set("email", user.getEmail()).set("phoneNumber", user.getPhoneNumber()).
+				set("interest", user.getInterest());
+		update(query, ops);
 	}
 
 }

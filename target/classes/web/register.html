@@ -2,13 +2,20 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Blog</title>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<title>Blogger</title>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<script type="text/javascript" src="js/tags.js"></script>
+
 <link rel='stylesheet' href='css/blog.css'>
 </head>
 <body>
 	<h1>Blog</h1>
 	<hr />
+	<center>
 	<h2>Register Yourself!</h2>
 	<form id="registerForm">
 	<table>
@@ -42,44 +49,24 @@
 		</tr>
 		<tr>
 			<td>Areas of Interest</td>
-			<td><select name="interest" multiple>
+			<td><select style="width:200px" name="interest" id="interest" multiple>
 					<option>Technology</option>
 					<option>Movies</option>
 					<option>Sports</option></select></td>
-		</tr>
+		</tr><br/><br/>
 		<tr>
-			<td><input type="button" id="register" value="Register"/> | <a href='#'>Cancel</a></td>
+			<td>
+				<a id="register" href="javascript:createProfile();" class="loginButton">Register</a> 
+				<a id="cancel" href="javascript:cancelRegister();" class="loginButton">Cancel</a>
+			</td>
 		</tr>
 	</table>
 	</form>
+	</center>
 </body>
 <script>
 
 $(document).ready(function(){
-    $("#register").click(function(){
-    	var data = {};
-    	$.each($("#registerForm").serializeArray(), function(_, key) {
-  		 if(key.name != 'confirm_password'){
-    	 if (data.hasOwnProperty(key.name)) {
-  			data[key.name] = $.makeArray(data[key.name]);
-  			data[key.name].push(key.value);
-  		  }
-  		  else {
-  			data[key.name] = key.value;
-  		  }
-  		 }
-  		});
-    	
-    	$.ajax({
-            url: '/api/register',
-            type: 'post',
-            dataType: 'application/json',
-            success: function (data) {
-                $('#target').html(data);
-            },
-            data: JSON.stringify(data)
-        });
-    });
 });
 </script>
 </html>

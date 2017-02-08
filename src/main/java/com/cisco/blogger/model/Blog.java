@@ -9,7 +9,7 @@ import org.mongodb.morphia.annotations.Id;
 @Entity
 public class Blog {
 	@Id
-	private String id;
+	private String _id;
 	private String title;
 	private String blogContent;
 	private List<BlogComment> comments;
@@ -17,6 +17,10 @@ public class Blog {
 	private List<String> authorizedUsers;
 	private Date createdDate;
 	private String createdBy;
+	private List<String> usersMarkedFavourites;
+	public Blog(){
+		this.createdDate = new Date();
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -59,11 +63,17 @@ public class Blog {
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String getId() {
-		return id;
+	public String get_id() {
+		return _id;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	public List<String> getUsersMarkedFavourites() {
+		return usersMarkedFavourites;
+	}
+	public void setUsersMarkedFavourites(List<String> usersMarkedFavourites) {
+		this.usersMarkedFavourites = usersMarkedFavourites;
 	}
 	
 }

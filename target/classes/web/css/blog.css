@@ -1,3 +1,116 @@
 body {
 	background-color: #D6EAF8;
 }
+#blogContent{
+	background-color:#FFFFFF;
+}
+
+.blogbg{
+	padding:10px;
+}
+.blogbg:HOVER{
+	background-color:#D7D7D7;
+}
+.bodyStyle {
+	background: url(../images/blog.jpg);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	overflow: auto;
+}
+
+.loginBackground {
+    background-color: #FFFFFF;
+    display: block;
+    height: 100%;
+    min-height: 300px;
+    width: 400px;
+}
+
+.nameHeader {
+	font-family: '', 'CiscoSans Thin', 'CiscoSans';
+	font-weight: 200;
+	font-style: normal;
+	font-size: 60px;
+	color: #A0A3AD;
+	text-align: center;
+}
+
+.loginButton {
+	font-family: Verdana, Geneva, Tahoma, Arial, Helvetica, sans-serif;
+	display: inline-block;
+	color: #FFFFFF;
+	background-color: #8AC007;
+	font-weight: bold;
+	font-size: 14px;
+	text-align: center;
+	padding-left: 15px;
+	padding-right: 15px;
+	text-decoration: none;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	border: 1px solid #8AC007;
+	border-radius: 15px;
+	white-space: nowrap;
+	min-width: 75px;
+	height: 27px;
+	padding-top: 6px;
+	cursor: pointer;
+}
+
+.loginButton:active {
+	background-color: #858688;
+	color: #FFFFFF;
+	border: 1px solid #66B2FF;
+}
+
+a.loginButton:hover {
+	background-color: #66B2FF;
+	color: #FFFFFF;
+	border: 1px solid #66B2FF;
+}
+
+.textField {
+	border: none !important;
+	border-bottom: 1px solid #B0B0B2 !important;
+	height: 30px;
+	width: 320px;
+	font-family: 'arial';
+	font-size: 14px;
+	font-color: #39393B;
+}
+
+.supportTxt {
+	font-size: 12px;
+	font-color: #39393B;
+}
+
+.bannerTxt {
+	font-size: 10px;
+	font-color: #39393B;
+	overflow: auto;
+	height: 210px;
+	width: 500px;
+}
+
+.errorImg {
+	align-self: center;
+	background: url("../images/alert_critical_12.png") no-repeat
+		scroll 0 0 rgba(0, 0, 0, 0);
+	float: left;
+	padding: 10px;
+}
+input {
+    width: 194px;
+    height: 15px;
+}
+td {
+    padding: 6px !important;
+}
+li {
+    margin-top: 10px;
+}
+
+.root>tbody>tr>td {
+    border: 2px Solid green;
+}

@@ -1,0 +1,1044 @@
+html{
+	overflow-x: hidden;
+	overflow-y: auto !important;
+}
+body {
+    padding       : 35px 5px 35px 5px !important;
+    font-family   : verdana, sans-serif;
+    font-size     : 8pt;
+    color         : #333;
+    margin-top    : 0px;
+    margin-left   : 0px;
+    margin-right  : 0px;
+    margin-bottom : 0px;
+}
+
+body.nomenu {
+    padding : 8px 15px !important;
+}
+
+#nav {
+    text-rendering : optimizeLegibility;
+    position       : fixed;
+    top            : 0;
+    left           : 0;
+    right          : 0;
+    height         : 32px;
+    background     : #343434;
+    color          : #000;
+    z-index        : 100;
+    border-bottom  : 2px solid #fff;
+}
+
+#nav a {
+    color           : inherit;
+    text-decoration : inherit;
+    font-weight     : inherit;
+    display         : block;
+}
+
+#nav a, .page-nav a {
+    text-decoration : none;
+}
+
+#nav ul, #nav li,
+.page-nav ul, .page-nav li {
+    margin          : 0;
+    padding         : 0;
+    list-style-type : none;
+}
+
+#nav td, #nav tr #nav table {
+    padding : 0;
+}
+
+#nav li {
+    cursor : pointer;
+    -webkit-user-select : none;
+       -moz-user-select : none;
+            user-select : none;
+}
+
+#nav ul.tabs {
+    margin    : 2px 7px 0px;
+    top       : 2px;
+    font-size : 14px;
+    height    : 30px;
+    min-width : 725px;
+}
+
+#nav li.tab {
+    float   : left;
+    z-index : 14;
+}
+
+#nav li.tab.separator {
+    border-left : 1px solid #777;
+    margin      : 5px;
+    height      : 20px;
+}
+
+#nav li.eyebrow.tab,
+#nav li.eyebrow.link,
+#nav li.eyebrow .menu-item {
+    float : right;
+}
+
+#nav li.tab .tab {
+    height      : 30px;
+    line-height : 30px;
+    padding     : 0px 8px;
+    position    : relative;
+    color       : #fff;
+    -webkit-border-radius : 4px 4px 0 0;
+       -moz-border-radius : 4px 4px 0 0;
+            border-radius : 4px 4px 0 0;
+/*    behavior : url(/PIE.htc); */
+    -pie-watch-ancestors: 1;
+}
+
+#nav li.empty.tab .tab,
+#nav li.empty.eyebrow.tab .tab {
+    height : 28px;
+    -webkit-border-radius : 4px;
+       -moz-border-radius : 4px;
+            border-radius : 4px;
+}
+
+#nav .help.eyebrow .tab,
+#nav .user.eyebrow .tab {
+    -webkit-border-radius : 4px;
+       -moz-border-radius : 4px;
+            border-radius : 4px;
+}
+
+#nav .help.eyebrow.hover .tab,
+#nav .user.eyebrow.hover .tab {
+    -webkit-border-radius : 4px 4px 0 0;
+       -moz-border-radius : 4px 4px 0 0;
+            border-radius : 4px 4px 0 0;
+}
+
+#nav a {
+    text-decoration : none;
+}
+
+#nav .user.tab .tab {
+    font-weight : bold;
+}
+
+#nav li.eyebrow.link {
+    color       : #fff;
+    height      : 22px;
+    line-height : 22px;
+    padding     : 0 8px;
+    margin-top  : 4px;
+    -webkit-border-radius : 4px;
+       -moz-border-radius : 4px;
+            border-radius : 4px;
+/*    behavior : url(/PIE.htc); */
+}
+
+#nav li.eyebrow.link a,
+#nav li.eyebrow.tab .tab a {
+    color : #fff;
+}
+
+#nav li.tab.active ul.menu {
+    display : block;
+}
+
+#nav li.eyebrow.active.tab .tab,
+#nav li.eyebrow.active.tab .tab a,
+#nav li.eyebrow.active.tab.hover .tab a {
+    color : #e0042d;
+}
+
+#nav li.tab.active .tab,
+#nav li.eyebrow.active.hover .tab,
+#nav li.tab.active a.tab {
+    background  : #fff;
+    font-weight : bold;
+    color       : #e0042d;
+    z-index     : 13;
+    -webkit-box-shadow : 0px -4px 3px 2px rgba(0,0,0,0.4);
+       -moz-box-shadow : 0px -4px 3px 2px rgba(0,0,0,0.4);
+            box-shadow : 0px -4px 3px 2px rgba(0,0,0,0.4);
+}
+
+#nav li.health.tab .icon {
+    background-repeat   : no-repeat;
+    background-position : left center;
+    padding             : 0px 8px;
+}
+
+#nav li.health.tab .icon,
+#nav li.health.tab.recovered .icon,
+#nav li.health.tab.green .icon,
+#nav li.health.tab.disabled .icon {
+    background-image    : url(/img/icons/famfamfam-silk-1.3/accept.png);
+}
+
+#nav li.health.tab.yellow .icon {
+    background-image    : url(/img/icons/famfamfam-silk-1.3/error.png);
+}
+
+#nav li.health.tab.red .icon,
+#nav li.health.tab.error .icon {
+    background-image    : url(/img/icons/famfamfam-silk-1.3/exclamation.png);
+}
+
+#nav ul.menu {
+    position    : absolute;
+    font-size   : 12px;
+    left        : 0;
+    right       : 0;
+    bottom      : 0;
+    top			: 32px;
+    height      : 24px;
+    display     : none;
+    height      : 24px;
+    white-space : nowrap;
+    z-index     : 12;
+    background  : #e1e1e1;
+    background  : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #e1e1e1));
+    background  : -moz-linear-gradient(top, #fff 0%, #e1e1e1 100%);
+    -pie-background : linear-gradient(top, #fff 0%, #e1e1e1 100%);
+    -webkit-box-shadow : 0px -2px 3px 0px rgba(0,0,0,0.4);
+       -moz-box-shadow : 0px -2px 3px 0px rgba(0,0,0,0.4);
+            box-shadow : 0px -2px 3px 0px rgba(0,0,0,0.4);
+/*    behavior : url(/PIE.htc); */
+    -pie-watch-ancestors: 1;
+    -pie-poll : true;
+}
+ #nav ul.tabs li.eyebrow ul.menu div.nowrapdivoverflow{
+    position: absolute;
+    right: 0px;
+ }
+
+#nav li.menu-item {
+    display      : inline-block;
+    height       : 24px;
+    line-height  : 24px;
+    position     : relative;
+    border-right : 1px solid #d0d0d0;
+    white-space  : nowrap;
+    z-index      : 11;
+    zoom         : 1;
+}
+
+#nav li.menu-item:first-child {
+    border-left : 1px solid #d0d0d0;
+}
+
+#nav li.eyebrow .menu-item {
+    border-left  : 1px solid #d0d0d0;
+    border-right : 0;
+}
+
+#nav li.eyebrow .menu-item:first-child {
+    border-right : 1px solid #d0d0d0;
+}
+
+#nav li.menu-item > a {
+    padding : 0 14px;
+}
+
+#nav li.right.menu-item {
+    float        : right;
+}
+
+#nav li.menu-item.has-flyout > a {
+    padding-right : 8px;
+}
+
+#nav li.menu-item.has-flyout.show-page > a {
+    padding-right : 14px;
+}
+
+#nav li.menu-item.active {
+    font-weight        : bold;
+    color              : #e0042d;
+    background : #fff;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eee), color-stop(100%,#fff));
+    background : -moz-linear-gradient(top, #eee 0%, #fff 100%);
+    -pie-background : linear-gradient(top, #eee 0%, #fff 100%);
+}
+
+#nav li.menu-item.active > a {
+    font-weight : bold;
+    color       : #e0042d;
+}
+
+#nav li.menu-item.has-flyout .triangle,
+.eventview-tabs .tab.has-flyout .triangle {
+    background-image    : url(/img/triangle-down.png);
+    background-repeat   : no-repeat;
+    background-position : center center;
+    padding             : 0px 6px;
+}
+
+.eventview-tabs .tab.has-flyout .triangle {
+    margin-left         : 8px;
+}
+
+.eventview-tabs .tab.has-flyout.active .triangle {
+    background-image    : url(/img/triangle-right-white.png);
+}
+
+.eventview-tabs .tab.has-flyout.active:hover .triangle {
+    background-image    : url(/img/triangle-right.png);
+}
+
+#nav .user.tab .triangle,
+#nav .help.tab .triangle {
+    background-image    : url(/img/triangle-down-gray.png);
+    background-repeat   : no-repeat;
+    background-position : center center;
+    padding             : 0px 3px;
+}
+
+#nav .user.tab.active .triangle,
+#nav .help.tab.active .triangle,
+#nav .user.tab.active.hover .triangle,
+#nav .help.tab.active.hover .triangle,
+#nav li.menu-item.has-flyout.active .triangle {
+    background-image : url(/img/triangle-down-red.png);
+}
+
+#nav li.menu-item.has-flyout.active.show-page .triangle {
+    background-image : url(/img/triangle-right-red.png);
+}
+
+#nav .user.tab.hover .triangle,
+#nav .help.tab.hover .triangle {
+    background-image : url(/img/triangle-down.png);
+}
+
+#nav .menu-item.has-flyout .page {
+    display : none;
+}
+
+#nav .menu-item.active.show-page .page {
+    display : inline;
+}
+
+#nav .flyout {
+    display    : none;
+}
+
+#nav .flyout {
+    left : 0;
+}
+
+#nav .flyout,
+#page-title .flyout,
+.quicklink .flyout,
+.eventview-tabs .flyout {
+    position   : absolute;
+    background : #eee;
+    border     : 1px solid #ccc;
+    z-index    : 15;
+    text-align : left;
+    padding    : 4px 2px;
+    -webkit-border-radius : 0px 0px 8px 8px;
+       -moz-border-radius : 0px 0px 8px 8px;
+            border-radius : 0px 0px 8px 8px;
+    -webkit-box-shadow : 0px 2px 3px rgba(0,0,0,0.15);
+       -moz-box-shadow : 0px 2px 3px rgba(0,0,0,0.15);
+            box-shadow : 0px 2px 3px rgba(0,0,0,0.15);
+       -pie-box-shadow : 0px 2px 3px #555;
+    /* behavior : url(/PIE.htc); */
+    -pie-poll : 1;
+}
+
+#nav .flyout,
+.quicklink .flyout {
+    top        : 24px;
+    border-top : 0;
+}
+
+.eventview-tabs .flyout {
+    display     : none;
+    top         : 22px;
+    margin-left : -13px;
+}
+
+.eventview-tabs .flyout-open .flyout {
+    display     : block;
+}
+
+#nav .flyout-column {
+    display : inline-block;
+}
+
+#nav .user.tab,
+#nav .help.tab {
+    position : relative;
+}
+
+#nav .user.tab .flyout,
+#nav .help.tab .flyout {
+    left    : auto;
+    right   : 0px;
+    top     : 30px;
+}
+
+#nav .right.menu-item .flyout,
+#nav .eyebrow .flyout {
+    right : 0;
+    left  : auto;
+}
+
+#nav .flyout li a {
+    vertical-align : top;
+    font-size      : 12px;
+    padding        : 0px 12px;
+    left           : 0;
+    font-weight    : normal;
+    color          : #000;
+    white-space    : nowrap;
+    z-index        : 15;
+}
+
+#nav .flyout-item > a,
+#nav .flyout .title {
+    padding     : 0px 12px;
+    height      : 24px;
+    line-height : 24px;
+}
+
+#nav .flyout .title {
+    color       : #000;
+    font-weight : bold;
+    background  : #ddd;
+}
+
+#nav .flyout-item.active,
+#nav .flyout-item.active a,
+#page-title .flyout-item.active a,
+.quicklink .flyout-item.active,
+.quicklink .flyout-item.active a,
+.eventview-tabs .flyout .active.flyout-tab {
+    font-weight : bold;
+    color       : #e0042d;
+}
+
+/* hover behavior */
+#nav li.tab.hover .tab {
+    z-index    : 25;
+}
+
+#nav li.eyebrow.flyout .tab,
+#nav li.tab.hover .tab {
+    background    : #eee;
+    color         : #e0042d;
+    z-index       : 35;
+    -webkit-box-shadow : 0px -4px 3px 2px rgba(0,0,0,0.4);
+       -moz-box-shadow : 0px -4px 3px 2px rgba(0,0,0,0.4);
+            box-shadow : 0px -4px 3px 2px rgba(0,0,0,0.4);
+}
+
+#nav li.eyebrow.link.hover .tab {
+    background : #ddd;
+    color      : #000;
+    z-index    : 35;
+}
+
+#nav li.user.eyebrow.hover .tab,
+#nav li.help.eyebrow.hover .tab {
+    background : #eee;
+}
+
+#nav li.eyebrow.link.hover a,
+#nav li.eyebrow.tab.hover .tab a {
+    color : #000;
+}
+
+#nav li.tab.hover ul.menu {
+    display    : block;
+    z-index    : 30;
+    background : #eee;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eee), color-stop(100%, #ddd));
+    background : -moz-linear-gradient(top, #eee 0%, #ddd 100%);
+    -pie-background : linear-gradient(top, #eee 0%, #ddd 100%);
+    -webkit-box-shadow : 0px 0px 5px 0px rgba(0,0,0,0.8);
+       -moz-box-shadow : 0px 0px 5px 0px rgba(0,0,0,0.8);
+            box-shadow : 0px 0px 5px 0px rgba(0,0,0,0.8);
+}
+
+#nav .menu-item.hover {
+    background : #ccc;
+}
+
+#nav .menu-item.active.has-flyout.hover {
+    background : #eee;
+}
+
+#nav .user.tab.hover .flyout,
+#nav .help.tab.hover .flyout,
+#nav .menu-item.hover .flyout {
+    display : block;
+}
+
+#nav .flyout-item:hover {
+    background : #ccc;
+}
+
+#nav .flyout .divider {
+    opacity    : 0.1;
+    filter     : alpha(opacity = 10);
+    color      : #000;
+    background : #000;
+    height     : 1px;
+    border     : 0;
+    margin     : 5px 0px;
+}
+
+#nav li.eyebrow {
+    font-size : 12px;
+}
+
+#page-title {
+    margin     : -8px 0 8px;
+    text-align : left;
+}
+
+#page-title.under-tabs {
+    margin-top : 16px;
+}
+
+#page-title h1 {
+    color       : #e0042d;
+    font-size   : 20px;
+    font-weight : normal;
+    margin      : 0;
+    height      : 24px;
+    line-height : 24px;
+    text-align  : left;
+    position    : relative;
+    display     : inline-block;
+}
+
+#page-title h1.has-flyout {
+    position : relative;
+    margin   : -2px -8px;
+    padding  : 2px 7px;
+}
+
+#page-title .overlay {
+    display  : none;
+    position : absolute;
+    z-index  : 15;
+    top      : -1px;
+    left     : 0px;
+}
+
+#page-title .overlay a {
+    display : block;
+}
+
+#page-title .overlay,
+#page-title .overlay a {
+    cursor : pointer;
+}
+
+#page-title .name {
+    white-space   : nowrap;
+    padding       : 2px 6px 0;
+    background    : #eee;
+    border        : 1px solid #ccc;
+    border-bottom : 0;
+    -webkit-border-radius : 8px 8px 0 0;
+       -moz-border-radius : 8px 8px 0 0;
+            border-radius : 8px 8px 0 0;
+}
+
+#page-title .flyout {
+    border-top : 0;
+    position   : static;
+    font-size  : 8pt;
+    color      : #555;
+}
+
+#page-title .show-flyout {
+    color : #888;
+    font-size : 8pt;
+    text-decoration : underline;
+    cursor : pointer;
+    vertical-align : middle;
+    padding-left : 6px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#page-title.show-flyout h1.has-flyout .overlay {
+    display: block;
+}
+
+#page-title.show-flyout .show-flyout {
+    display : none;
+}
+
+#page-title.show-flyout .overlay .close {
+    position            : absolute;
+    top                 : 9px;
+    right               : 8px;
+    height              : 14px;
+    width               : 14px;
+    background-image    : url(/img/window-controls.png);
+    background-position : 0px -112px;
+    text-decoration     : none;
+    padding             : 0;
+    background-repeat   : no-repeat;
+}
+
+#page-title.show-flyout .overlay .close:hover {
+    background-position : 0px -126px;
+}
+
+#page-title .overlay .name {
+    padding-right : 26px;
+}
+
+#page-title ul, #page-title li {
+    margin  : 0;
+    padding : 0;
+}
+
+#page-title li {
+    list-style-type : none;
+    line-height     : 20px;
+}
+
+#page-title li:hover {
+    background : #ccc;
+}
+
+#page-title a {
+    text-decoration : none;
+    color           : #444;
+    padding         : 0 5px;
+    white-space     : nowrap;
+}
+
+#page-title .description {
+    font-size   : 11px;
+    height      : 16px;
+    line-height : 12px;
+    color       : #555;
+}
+
+.quicklinks {
+    margin-top    : -8px;
+    height        : 24px;
+    margin-bottom :  8px;
+    z-index       : 21;
+    position      : relative;
+}
+
+.quicklinks li, .quicklinks ul {
+    list-style-type : none;
+    margin      : 0;
+    padding     : 0;
+}
+
+.quicklinks > ul > li {
+    display     : inline-block;
+    position    : relative;
+    font-size   : 8pt;
+    height      : 24px;
+    line-height : 24px;
+}
+
+.quicklinks > ul {
+    float : right;
+    background : #ddd;
+    line-height : 24px;
+    height : 24px;
+    padding : 0px 5px;
+    -webkit-border-radius : 4px;
+       -moz-border-radius : 4px;
+            border-radius : 4px;
+    behavior : url(/PIE.htc);
+}
+
+.quicklinks a {
+    padding         : 0 5px;
+    color           : #555;
+    white-space     : nowrap;
+    text-decoration : none;
+}
+
+.quicklink:hover {
+    background : #eee;
+}
+
+.quicklink:hover .flyout {
+    display : block;
+}
+
+.quicklink.has-flyout .triangle {
+    background-image    : url(/img/triangle-down.png);
+    background-repeat   : no-repeat;
+    background-position : center center;
+    padding             : 0px 6px;
+    text-decoration     : none;
+}
+
+.quicklink .flyout {
+    right   : 0;
+    display : none;
+}
+
+.quicklink .flyout li:hover {
+    background : #ccc;
+}
+
+.quicklink a {
+    display : block;
+}
+
+.quicklink .flyout-item {
+    line-height : 20px;
+}
+
+.page-nav {
+    margin   : 0 0 8px;
+    position : relative;
+    z-index  : 5;
+}
+
+.page-nav .super.actions {
+    position : absolute;
+    top      : -8px;
+    right    : 0;
+    height   : 24px;
+}
+
+.page-nav .super.actions-onbox {
+    position : absolute;
+    top      : -35px;
+    right    : 0;
+    height   : 24px;
+}
+
+.page-nav .toolbar li.left {
+    float : left;
+}
+
+.page-nav .toolbar li.right,
+.page-nav .super.actions li {
+    float : right;
+}
+
+.page-nav .super.actions li {
+    margin-left : 2px;
+}
+
+.eventview-tabs-container {
+    height        : 22px;
+    width         : 100%;
+    border-bottom : 2px solid #5D81B3;
+    position      : relative;
+    z-index       : 5;
+}
+
+.page-nav .tabs,
+.eventview-tabs {
+    height        : 22px;
+    z-index       : 13;
+    border-bottom : 2px solid #5D81B3;
+    padding       : 0;
+    margin        : 0;
+    -webkit-user-select : none;
+    -moz-user-select    : none;
+    -ms-user-select     : none;
+}
+
+.page-nav .tabs {
+    font-size     : 12px;
+}
+
+.eventview-tabs {
+    display       : table;
+    font-size     : 11px;
+    white-space   : nowrap;
+}
+
+.page-nav .tab,
+.eventview-tabs .tab {
+    margin                : 0 2px 0 0;
+    color                 : #444;
+    background            : #e5e5e5;
+    background            : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E5E5E5), color-stop(86%,#E5E5E5), color-stop(100%,#CCCCCC));
+    background            : -moz-linear-gradient(top, #E5E5E5 0%, #E5E5E5 86%, #CCCCCC 100%);
+    -pie-background       : linear-gradient(top, #E5E5E5 0%, #E5E5E5 86%, #CCCCCC 100%);
+    -webkit-border-radius : 4px 4px 0 0;
+    -moz-border-radius    : 4px 4px 0 0;
+    border-radius         : 4px 4px 0 0;
+    behavior              : url(/PIE.htc);
+    -pie-poll             : true;
+}
+
+.page-nav .tab {
+    float         : left;
+    height        : 22px;
+    line-height   : 22px;
+    padding       : 0;
+}
+
+.eventview-tabs .tab {
+    border        : 1px solid #ccc;
+    border-bottom : none;
+    cursor        : pointer;
+    display       : inline-block;
+    height        : 21px;
+    line-height   : 20px;
+    padding       : 0 12px;
+}
+
+.eventview-tabs .tab.has-flyout:hover,
+.eventview-tabs .tab.has-flyout.flyout-open {
+    color           : #444;
+    background      : #c5c5c5;
+    -pie-background : #c5c5c5;
+}
+
+.eventview-tabs .flyout .flyout-tab {
+    cursor        : pointer;
+    display       : block;
+    line-height   : 20px;
+    padding       : 0 9px;
+    color         : #444;
+    font-weight   : normal;
+}
+
+.eventview-tabs .flyout .flyout-tab:hover,
+.eventview-tabs .flyout .flyout-tab.hover {
+    background    : #c5c5c5;
+}
+
+.page-nav .tab:hover,
+.eventview-tabs .tab:hover {
+    background      : #c5c5c5;
+    background      : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#C5C5C5), color-stop(86%,#C5C5C5), color-stop(100%,#AAAAAA));
+    background      : -moz-linear-gradient(top, #C5C5C5 0%, #C5C5C5 86%, #AAAAAA 100%);
+    -pie-background : linear-gradient(top, #C5C5C5 0%, #C5C5C5 86%, #AAAAAA 100%);
+}
+
+.page-nav .tab a {
+    text-decoration : none;
+    color           : #444;
+    padding         : 0 15px;
+    font-weight     : bold;
+}
+
+.page-nav .active.tab,
+.page-nav .selected.tab,
+.eventview-tabs .active.tab {
+    color           : #fff;
+    background      : #5d81b3;
+    background      : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #6b94ce), color-stop(100%, #5d81b3));
+    background      : -moz-linear-gradient(top, #6b94ce 0%, #5d81b3 100%);
+    -pie-background : linear-gradient(top, #6b94ce 0%, #5d81b3 100%);
+}
+
+.eventview-tabs .active.tab {
+    font-weight : bold;
+}
+
+.page-nav .active.tab a,
+.page-nav .selected.tab a {
+    font-weight : bold;
+    color       : #fff;
+}
+
+.page-nav .tab .remove {
+    background-image  : url(/img/window-controls.png);
+    padding           : 0;
+    background-repeat : no-repeat;
+    margin            : 0 -10px -3px 4px;
+    background-position: 0px -112px;
+    display           : inline-block;
+    height            : 14px;
+    width             : 14px;
+}
+
+.page-nav .tab .remove:hover {
+    background-position: 0px -126px;
+}
+
+.page-nav .action {
+    background-position : center center;
+    background-repeat   : no-repeat;
+    padding             : 0 8px 8px;
+    margin              : 0;
+}
+
+.page-nav .add.action {
+    line-height         : 22px;
+    padding             : 0;
+    margin-left         : 5px;
+    background-image    : url(/img/window-controls.png);
+    background-position : 0px -84px;
+    margin              : 4px 0 -6px 4px;
+    display             : inline-block;
+    height              : 14px;
+    width               : 14px;
+}
+
+.page-nav .add.action:hover {
+    background-position: 0px -98px;
+}
+
+.page-nav .pause.action {
+    background-image    : url(/img/inline-pause.png);
+}
+
+.page-nav .toolbar {
+    height     : 24px;
+}
+
+.page-nav.has-tabs .toolbar {
+    position   : relative;
+    border-top    : 1px solid #abc0de;
+    border-bottom : 1px solid #98b2d7;
+    background : #acc1df;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #bbd2f2), color-stop(100%, #acc1df));
+    background : -moz-linear-gradient(top, #bbd2f2 0%, #acc1df 100%);
+    -pie-background : linear-gradient(top, #bbd2f2 0%, #acc1df 100%);
+    behavior : url(/PIE.htc);
+    -pie-poll : true;
+}
+
+.has-tabs .tabs {
+    overflow:hidden;
+}
+
+.page-nav button {
+    cursor     : pointer;
+    display    : inline-block;
+    padding    : 0px 8px;
+    position   : relative;
+    border     : 1px solid #999;
+    color      : #000;
+    min-width  : 36px;
+    height     : 22px;
+    text-align : center;
+    background : #e5e5e5;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(91%,#ccc), color-stop(100%,#e0e0e0));
+    background : -moz-linear-gradient(top, #fff 0%, #ccc 91%, #e0e0e0 100%);
+    -pie-background : linear-gradient(top, #fff 0%, #ccc 91%, #e0e0e0 100%);
+    -webkit-user-select : none;
+    -moz-border-radius : 0.5em;
+         border-radius : 0.5em;
+    -webkit-box-shadow : 0px 1px 1px 0px rgba(0,0,0,0.1);
+       -moz-box-shadow : 0px 1px 1px 0px rgba(0,0,0,0.1);
+            box-shadow : 0px 1px 1px 0px rgba(0,0,0,0.1);
+    behavior : url(/PIE.htc);
+}
+
+.page-nav button:active {
+    background : #ccc;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#999), color-stop(10%,#ccc), color-stop(100%,#ccc));
+    background : -moz-linear-gradient(top, #999 0%, #ccc 10%, #ccc 100%);
+    -pie-background : linear-gradient(top, #999 0%, #ccc 10%, #ccc 100%);
+    -webkit-box-shadow : none;
+       -moz-box-shadow : none;
+            box-shadow : none;
+}
+
+.page-nav button img {
+    vertical-align : middle;
+    margin         : -6px 4px -2px -3px;
+}
+
+.page-nav .toolbar button {
+    margin-right : 5px;
+    margin-left  : 0px;
+}
+
+.page-nav .toolbar .right button {
+    margin-right : 0px;
+    margin-left  : 5px;
+}
+
+.page-nav.has-tabs .toolbar button {
+    box-shadow   : none;
+    background   : none;
+    border       : 0;
+    border-left  : 1px solid #ddeafb;
+    border-right : 1px solid #c0cddd;
+    height       : 24px;
+    line-height  : 24px;
+    margin       : 0;
+    padding      : 0px 10px;
+    background   : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #c0cddd));
+    background   : -moz-linear-gradient(top, #ffffff 0%, #c0cddd 100%);
+    -pie-background : linear-gradient(top, #ffffff 0%, #c0cddd 100%);
+    -webkit-border-radius : 0;
+       -moz-border-radius : 0;
+            border-radius : 0;
+    behavior : url(/PIE.htc);
+}
+
+.page-nav.has-tabs .toolbar button:active {
+    border-left-color  : #9ea3a9;
+    border-right-color : #ddeafb;
+    background         : #dce3ec;
+    background         : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9ea3a9), color-stop(10%, #dce3ec), color-stop(100%, #dce3ec));
+    background         : -moz-linear-gradient(top, #9ea3a9 0%, #dce3ec 10%, #dce3ec 100%);
+    -pie-background    : linear-gradient(top, #9ea3a9 0%, #dce3ec 10%, #dce3ec 100%);
+}
+
+.nowrapdiv{
+    width:5000px;
+    overflow:hidden;
+}
+
+
+#page-footer {
+    position    : fixed;
+    left        : 0;
+    right       : 0;
+    bottom      : 0;
+    height      : 32px;
+    line-height : 32px;
+    font-size   : 10px;
+    background  : #343434;
+    color       : #ddd;
+    text-align  : left;
+    z-index     : 11;
+    padding     : 0px 15px;
+    border-top  : 2px solid #fff;
+}
+
+#page-footer img.logo {
+    position : absolute;
+    right    : 15px;
+    top      : 0px;
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    clear: both;
+}
+
+ .nowrapdivoverflow{
+    width:5000px;
+ }
+
+.page-nav table.mtop button img.x-btn-image{
+    position: absolute !important;
+    top: 4px !important;
+    left: 0px;
+}
+.borderNone{
+	border:none;
+	width:250px !important;
+}
