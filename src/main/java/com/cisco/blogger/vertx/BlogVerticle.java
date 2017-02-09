@@ -4,18 +4,12 @@ import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.AuthProvider;
-import io.vertx.ext.auth.User;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.RedirectAuthHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
 import java.util.ArrayList;
@@ -28,15 +22,8 @@ import org.springframework.context.ApplicationContext;
 public class BlogVerticle extends AbstractVerticle {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	AuthProvider authProvider = new AuthProvider() {
-		
-		@Override
-		public void authenticate(JsonObject authInfo,
-				Handler<AsyncResult<User>> resultHandler) {
-			
-		}
-	};
-	AuthHandler redirectAuthHandler = RedirectAuthHandler.create(authProvider);
+	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
+	
 	public BlogVerticle(ApplicationContext context) {
 	}
 
@@ -50,13 +37,21 @@ public class BlogVerticle extends AbstractVerticle {
 			response.putHeader("content-type", "text/html")
 					.end("<h1>Hello from my first Vert.x 3 application via routers</h1>");
 		});
-		
 		router.route("/static/*").handler(StaticHandler.create("web"));
-	
+		router.route("/api/*").handler(BodyHandler.create());
+		router.route("/unprotected/*").handler(BodyHandler.create());
+
+		/** Register a user **/
+		router.post("/unprotected/register").handler(rctx -> {
+			logger.info("Registration request received.");
+			vertx.eventBus().send("com.cisco.blogger.user.register", rctx.getBodyAsJson(), r -> {
+				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
+				.end(r.result().body().toString());
+			});
+		});
 		
 		/** User Login **/
-		router.route("/api/login").handler(BodyHandler.create());
-		router.post("/api/login").handler(rctx -> {
+		router.post("/unprotected/login").handler(rctx -> {
 			vertx.eventBus().send("com.cisco.user.login", rctx.getBodyAsJson(), r -> {
 				JsonObject obj = new JsonObject(rctx.getBodyAsJson().toString());
 				String userName = obj.getString("userName");
@@ -65,14 +60,30 @@ public class BlogVerticle extends AbstractVerticle {
 				final Cookie cookie = new DefaultCookie("username", userName);
 				cookie.setPath("/");
 				cookies.add(cookie);
-				final Cookie loginToken = new DefaultCookie("loginToken", r.result().body().toString());
-				cookies.add(loginToken);
-				cookie.setPath("/");
 				rctx.response().setStatusCode(200).putHeader("set-cookie", ServerCookieEncoder.LAX.encode(cookies)).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());
 			});
 		});
-		
+		/** Token Validation **/
+		router.route("/api/*").handler(rctx -> {
+			HttpServerResponse response = rctx.response();
+			HttpServerRequest request = rctx.request();
+			response.setChunked(true);
+		   String tokenPayload = request.getHeader(JWT_TOKEN_HEADER_PARAM);
+		   String token = JWTHeaderTokenExtractor.extract(tokenPayload);
+			logger.info("Validating token:");
+			vertx.eventBus().send("com.cisco.user.validate",token,  r -> {
+				String reply = r.result().body().toString();
+		        if (reply.equalsIgnoreCase("failed")) {
+		        	logger.info("Token validation failed");
+		        	rctx.response().setStatusCode(401).putHeader("content-type", "application/html; charset=utf-8")
+		        		.end("Invalid token passed:");
+		        } else {
+		        	logger.info("Token validated successfully.Proceeding to next route");
+		        	rctx.next();
+		        }
+			});
+		});		
 		router.get("/api/blog/:title").handler(rctx -> {
 			String title = rctx.request().getParam("title");
 			vertx.eventBus().send("com.cisco.blogger.getBlogByTitle", title, r -> {
@@ -97,7 +108,7 @@ public class BlogVerticle extends AbstractVerticle {
 				.end(r.result().body().toString());
 			});
 		});
-		router.get("/api/tags").handler(rctx -> {
+		router.get("/unprotected/tags").handler(rctx -> {
 			vertx.eventBus().send("com.cisco.blogger.getBlogUniqueTags", "", r -> {
 				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());
@@ -166,15 +177,6 @@ public class BlogVerticle extends AbstractVerticle {
 			  ctx.response()
 			          .setStatusCode(404)
 			          .end("NOT FOUND fancy html here!!!");
-		});
-		
-		router.route("/api/register").handler(BodyHandler.create());
-		router.post("/api/register").handler(rctx -> {
-			logger.info("Registration request received.");
-			vertx.eventBus().send("com.cisco.blogger.user.register", rctx.getBodyAsJson(), r -> {
-				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
-				.end(r.result().body().toString());
-			});
 		});
 		
 		router.route("/api/user/info").handler(BodyHandler.create());

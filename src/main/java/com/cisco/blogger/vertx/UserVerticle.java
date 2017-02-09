@@ -100,7 +100,7 @@ public class UserVerticle extends AbstractVerticle {
 				message.reply(userparsed);
 				
 			} catch (Exception e) {
-				message.reply(false);
+				message.reply("failed");
 			}
 		});
 		

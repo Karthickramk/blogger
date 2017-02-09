@@ -56,7 +56,7 @@ function login(){
 	     data["userName"] = $("#userName").val();
 	     data["password"] = $("#password").val();
 		$.ajax({
-			url : '/api/login',
+			url : '/unprotected/login',
 			type : 'POST',
 			data: JSON.stringify(data),
 			accepts: {

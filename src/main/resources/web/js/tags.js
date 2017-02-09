@@ -11,7 +11,7 @@ $(document).ready(function() {
 		return split( term ).pop();
 	}
 	$.ajax({
-		url : '/api/tags',
+		url : '/unprotected/tags',
 		type : 'get',
 		accept : 'application/json',
 		async: false,

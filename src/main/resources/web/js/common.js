@@ -5,7 +5,12 @@ $.ajaxSetup({
     beforeSend: function (xhr)
     {
        xhr.setRequestHeader("X-Authorization","Bearer "+token);        
-    }
+    },
+    error:function(x,e) {
+	    if(x.status==401) {
+	    	window.location = "index.html";
+	    }
+  }
 });
 var userName = readCookie('username');
 function readCookie(name) {
@@ -179,7 +184,7 @@ function createProfile(){
 		 }
 	});
 	$.ajax({
-        url: '/api/register',
+        url: '/unprotected/register',
         type: 'POST',
         dataType: 'text',
 	    data: JSON.stringify(data),
@@ -334,6 +339,7 @@ function popuateBlogContent(data){
 
 
 function logout(){
+	localStorage.clear();
 	deleteCookie('userName');
 	deleteCookie('loginToken');
 	
