@@ -3,6 +3,7 @@ package com.cisco.blogger.vertx;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
@@ -17,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 public class BlogVerticle extends AbstractVerticle {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
 	
 	public BlogVerticle(ApplicationContext context) {
 	}
@@ -33,15 +35,17 @@ public class BlogVerticle extends AbstractVerticle {
 		});
 		router.route("/static/*").handler(StaticHandler.create("web"));
 		router.route("/api/*").handler(BodyHandler.create());
+		router.route("/unprotected/*").handler(BodyHandler.create());
+
 		/** Register a user **/
-		router.post("/api/register").handler(rctx -> {
+		router.post("/unprotected/register").handler(rctx -> {
 			vertx.eventBus().send("com.cisco.blogger.register", rctx.getBodyAsJson(), r -> {
 				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());
 			});
 		});
 		/** User Login **/
-		router.post("/api/login").handler(rctx -> {
+		router.post("/unprotected/login").handler(rctx -> {
 			vertx.eventBus().send("com.cisco.user.login", rctx.getBodyAsJson(), r -> {
 				// Put some data from the session
 
@@ -49,6 +53,27 @@ public class BlogVerticle extends AbstractVerticle {
 				.end(r.result().body().toString());
 			});
 		});
+		/** Token Validation **/
+		router.post("/api/*").handler(rctx -> {
+			HttpServerResponse response = rctx.response();
+			HttpServerRequest request = rctx.request();
+			response.setChunked(true);
+		   String tokenPayload = request.getHeader(JWT_TOKEN_HEADER_PARAM);
+		   String token = JWTHeaderTokenExtractor.extract(tokenPayload);
+			System.out.println("Validating token:");
+			vertx.eventBus().send("com.cisco.user.validate",token,  r -> {
+				String reply = r.result().body().toString();
+		        if (reply.equalsIgnoreCase("failed")) {
+		        	System.out.println("Token validation failed");
+		        	rctx.response().setStatusCode(401).putHeader("content-type", "application/html; charset=utf-8")
+		        		.end("Invalid token passed:");
+		        } else {
+		        	System.out.println("Token validated successfully.Proceeding to next route");
+		        	rctx.next();
+		        }
+			});
+		});		
+
 		router.get("/api/blog/:title").handler(rctx -> {
 			String title = rctx.request().getParam("title");
 			vertx.eventBus().send("com.cisco.blogger.getBlogByTitle", title, r -> {

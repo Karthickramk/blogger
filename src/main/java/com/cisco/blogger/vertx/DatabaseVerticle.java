@@ -69,6 +69,7 @@ public class DatabaseVerticle extends AbstractVerticle {
 			message.reply(Json.encodePrettily(blog));
 		});
 		vertx.eventBus().consumer("com.cisco.blogger.register", message -> {
+			System.out.println(message.body().toString());
 			User user = Json.decodeValue(message.body().toString(), User.class);
 			System.out.println(user.toString());
 			boolean isusercreated = userDao.createUser(user);

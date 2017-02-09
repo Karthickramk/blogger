@@ -1,4 +1,4 @@
-package com.cisco.blogger.vertx;
+	package com.cisco.blogger.vertx;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.Json;
@@ -103,13 +103,14 @@ public class UserVerticle extends AbstractVerticle {
 		
 		vertx.eventBus().consumer("com.cisco.user.validate",message -> {
 			try {
+
 				String token = message.body().toString();
 				String userparsed = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
 				System.out.println("userparsed-->"+userparsed);
 				message.reply(userparsed);
 				
 			} catch (Exception e) {
-				message.reply(false);
+				message.reply("failed");
 			}
 		});
 		

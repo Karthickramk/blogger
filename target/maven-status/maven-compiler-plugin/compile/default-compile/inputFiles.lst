@@ -3,6 +3,7 @@
 /Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/vertx/BlogVerticle.java
 /Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/dao/UserDao.java
 /Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/vertx/DatabaseVerticle.java
+/Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/vertx/JWTHeaderTokenExtractor.java
 /Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/model/BlogComment.java
 /Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/model/User.java
 /Users/pkeshava/Downloads/cmadassignment/blogger/src/main/java/com/cisco/blogger/dao/BlogDao.java
