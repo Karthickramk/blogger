@@ -67,6 +67,8 @@ function login(){
 					alert("Invalid user name or password");
 				}
 				else{
+					localStorage.setItem("token", data);
+					localStorage.setItem("userName", $("#userName").val());
 					window.location="home.html";
 				}
 			}

@@ -1,3 +1,12 @@
+var userName = localStorage.getItem("userName");
+var token = localStorage.getItem("token");
+$.ajaxSetup({
+
+    beforeSend: function (xhr)
+    {
+       xhr.setRequestHeader("X-Authorization","Bearer "+token);        
+    }
+});
 var userName = readCookie('username');
 function readCookie(name) {
 	  var nameEQ = name + "=";

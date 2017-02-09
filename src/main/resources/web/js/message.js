@@ -1,4 +1,4 @@
-var userName = readCookie('username');
+var userName = localStorage.getItem("userName");
 function readCookie(name) {
 	  var nameEQ = name + "=";
 	  var ca = document.cookie.split(';');
