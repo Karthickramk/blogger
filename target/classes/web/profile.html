@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src='js/common.js'></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/message.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/tags.js"></script>
+
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<link rel='stylesheet' href='css/blog.css'>
+<meta charset="ISO-8859-1">
+<title>Blogger</title>
+</head>
+<body>
+	<h1>Blogs</h1>
+	<hr />
+	<a href='home.html'>Home</a> |
+	<a href='new.html'>New Post</a> |
+	<input id="search_input" type="text"/>
+	<a href='#' id="search">Search Blog</a> | Invite
+	<input id='invite_id' placeholder="email1, email2, email3"> <input type='button' value="Invite" style="cursor: pointer;height: 25px;width: 70px;" onclick="invite()">|
+	<a href='profile.html' id='username'></a>|
+	<a href='index.html'>Logout</a>
+	<hr />
+	<table  class='root'>
+		<tr>
+			<td width="20%" valign="top">
+				<h2>Favorite Posts</h2>
+				<ul>
+					<div id="favBlogs"></div>
+				</ul>
+			</td>
+			<td valign="top" width='50%'>
+				<h2>Your Profile</h2>
+				<form id="profile">
+				<input type="hidden" name="userName" id="userName-hidden"/>
+				<table>
+					<tr>
+						<td>First Name</td>
+						<td><input value='' name="firstName" id="firstName"></td>
+					</tr>
+					<tr>
+						<td>Last Name</td>
+						<td><input value='' name="lastName" id="lastName"></td>
+					</tr>
+					<tr>
+						<td>User Name</td>
+						<td id="userName">
+						</td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td><input type='password' name="password" id="password"></td>
+					</tr>
+					<tr>
+						<td>Confirm Password</td>
+						<td><input type='password' name="confirm_password" id="confirm_password"></td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td><input value='adf@adf.com' name="email" id="email"></td>
+					</tr>
+					<tr>
+						<td>Phone Number</td>
+						<td><input value='' name="phoneNumber" id="phoneNumber"></td>
+					</tr>
+					<tr>
+						<td>Areas of Interest</td>
+						<td>
+							<select style="width:200px" name="interest" id="interest" multiple>
+								<option>Technology</option>
+								<option>Movies</option>
+								<option>Sports</option>
+							</select>
+						</td>
+					</tr><br/><br/>
+					<tr>
+						<td>
+							<a id="update" href="javascript:updateProfile();" class="loginButton">Update</a> | <a id="cancel" href="javascript:cancel();" class="loginButton">Cancel</a>
+						 </td>
+					</tr>
+				</table>
+				</form>
+			</td>
+			<td width="30%" valign="top">
+				<h2>Messages</h2>
+				<div id="messageContainer">
+				</div>
+				<hr /> <br />
+				<textarea id="message" rows="10" cols="50"></textarea><br /><br />
+				<a id="postMessage" href="javascript:postMessage();" class="loginButton">Post Message</a>
+			</td>
+		<tr>
+		</tr>
+	</table>
+</body>
+<script>
+$(document).ready(function() {
+	var userName = readCookie('username');
+	$("#username").text(userName);
+
+    $.ajax({
+		url : '/api/user/info/'+userName,
+		type : 'get',
+		accept : 'application/json',
+		success : function(jsonResponse) {
+			data = JSON.parse(jsonResponse);
+			$("#firstName").val(data.firstName);
+			$("#lastName").val(data.lastName);
+			$("#userName").text(data.userName);
+			$("#password").val(data.password);
+			$("#userName-hidden").val(data.userName);
+			$("#email").val(data.email);
+			$("#phoneNumber").val(data.phoneNumber);
+			$("#interest").val(data.interest);
+		}
+	});
+});
+</script>	
+</html>

@@ -40,7 +40,7 @@ public class ApplicationConfiguration {
 	@Bean(name="mongo")
 	@Autowired
 	public MongoClient getMongoClient() {
-		return new MongoClient("localhost", 27017);
+		return new MongoClient("10.106.9.90", 27017);
 	}
 	
 	@Bean(name="morphia")

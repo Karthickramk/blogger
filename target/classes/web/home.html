@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Blogger</title>
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/message.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/tags.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<link rel='stylesheet' href='css/blog.css'>
+</head>
+<body>
+	<h1>Blogs</h1>
+	<hr />
+	<a href='home.html'>Home</a> |
+	<a href='new.html'>New Post</a> |
+	<input id="search_input" type="text"/>
+	<a href='#' id="search">Search Blog</a> | Invite
+	<input id='invite_id' placeholder="email1, email2, email3"> <input type='button' value="Invite" style="cursor: pointer;height: 25px;width: 70px;" onclick="invite()">|
+	<a href='profile.html' id='username'></a>|
+	<a href='index.html' onclick="javascript:logout();">Logout</a>
+	<hr />
+	<table class='root'>
+		<tr>
+			<td width="20%" valign="top">
+				<h2>Favorite Posts</h2>
+				<ul>
+					<div id="favBlogs"></div>
+				</ul>
+			</td>
+			<td valign="top" width='50%' id='blogContent'>
+			</td>
+			<td width="30%" valign="top">
+				<h2>Messages</h2>
+				<div id="messageContainer">
+				</div>
+				<hr /> <br />
+				<textarea id="message" rows="10" cols="50"></textarea><br /><br />
+				<a id="postMessage" href="javascript:postMessage();" class="loginButton">Post Message</a>
+			</td>
+		</tr>
+	</table>
+<script>
+$(document).ready(function() {
+	$.ajax({
+		url : '/api/blog',
+		type : 'get',
+		accept : 'application/json',
+		success : function(data) {
+			buildBlogContent(data);
+		}
+	});
+	
+	$("#search").click(function() {
+		var tag = '/api/tag/blog/'+$("#search_input").val();
+		$("#blogContent").html("");
+		$.ajax({
+			url : tag,
+			type : 'get',
+			accept : 'application/json',
+			success : function(data) {
+				buildBlogContent(data);
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>
