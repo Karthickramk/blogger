@@ -43,3 +43,13 @@
   "createdDate" : 1486619377963,
   "createdBy" : "admin"
 }
+[2017-02-09 12:48:19,163]  INFO DatabaseVerticle:68 - {
+  "id" : "589c17bb7efeeaf6e98fa971",
+  "title" : "myblog",
+  "blogContent" : "adfafsdfdsfsdafasfdsd",
+  "comments" : null,
+  "tags" : null,
+  "authorizedUsers" : null,
+  "createdDate" : 1486624699162,
+  "createdBy" : "admin"
+}
