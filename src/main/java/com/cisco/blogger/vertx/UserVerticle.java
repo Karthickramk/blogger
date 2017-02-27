@@ -10,6 +10,7 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import java.io.InputStream;
 import java.security.Key;
 import java.security.KeyStore;
+import java.util.Date;
 import java.util.Optional;
 
 import javax.validation.Validator;
@@ -74,6 +75,7 @@ public class UserVerticle extends AbstractVerticle {
 
 				String compactJws = Jwts.builder()
 				  .setSubject(user.getUserName())
+				  .setExpiration(new Date(System.currentTimeMillis() + 300000))
 				  .signWith(SignatureAlgorithm.HS512, key)
 				  .compact();
 				logger.info("compactJws-->" + compactJws);
