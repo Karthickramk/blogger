@@ -10,10 +10,10 @@ function readCookie(name) {
 	  return null;
 }
 $(document).ready(function() {
-	loadFavouriteBlog();
-	loadMessages();
+	//loadFavouriteBlog();
+	//loadMessages();
 	setInterval(function() {
-		loadMessages();
+		//loadMessages();
 	}, 1000 * 60 * 0.10);
 });
 function loadMessages(){
