@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="BloggerHome" lang="en">
 <head>
     <meta charset="utf-8">
     <title id="Title"></title>
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="js/angular.js"></script>
+	<script type="text/javascript" src="js/angular-resource.js"></script>
+	<script type="text/javascript" src="js/routes.js"></script>
+    <script src="js/common.js"></script>
     
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/global.css">
@@ -14,7 +18,7 @@
 <body class="bodyStyle">
 <div class="header"></div>
 <center>
-    <div  id="loginDiv" class="loginBackground content">
+    <div  id="loginDiv" class="loginBackground content" ng-controller='LoginController'>
         <form>  
         
             <div style="font-family: Comic Sans MS;line-height: 5;font-size: 18px; "><span style="font-size: 16px;">Blogger</span></div>
@@ -23,15 +27,15 @@
             <div id="credentialDiv"> 
             
             <input id="userName" type="text" name="username" value="" placeholder="User name"
-                   maxlength="32"   class="textField" style="margin-bottom:10px;"/>
+                   maxlength="32"   class="textField" style="margin-bottom:10px;" ng-model='loginDetails.userName'/>
             <br/><br/>
             <input id="password" type="password" name="password" value="" placeholder="Password"
-               autocomplete="off" maxlength="32"  class="textField"/>
+               autocomplete="off" maxlength="32"  class="textField" ng-model='loginDetails.password'/>
             <br/><br/>
             
             </div>  
 			<br/>
-            <a id="login" href="javascript:login()" class="loginButton">Login</a>
+            <a id="login" href="" ng-click='login()'  class="loginButton">Login</a>
             <a id="register" href='register.html' class="loginButton">Register</a>
         </form>
         <br/><br/>
@@ -50,29 +54,4 @@
         </div>
     </div>
 </body>
-<script>
-function login(){
-		 var data = {};
-	     data["userName"] = $("#userName").val();
-	     data["password"] = $("#password").val();
-		$.ajax({
-			url : '/unprotected/login',
-			type : 'POST',
-			data: JSON.stringify(data),
-			accepts: {
-		        text: "application/json"
-		    },
-			success: function(data) {
-				if(data == false){
-					alert("Invalid user name or password");
-				}
-				else{
-					localStorage.setItem("token", data);
-					localStorage.setItem("userName", $("#userName").val());
-					window.location="home.html";
-				}
-			}
-		});
-}
-</script>
 </html>

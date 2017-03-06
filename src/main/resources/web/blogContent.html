@@ -1,0 +1,23 @@
+<div class='blogbg' ng-repeat='blog in blogs track by $index'>
+					<input type='hidden' id='blogId-{{$index}}' value='{{blog._id}}' />
+					<div style='font-weight: bold; font-size: 23px;'>{{blog.title}}</div>
+					<img title='Mark Un Favourite' style='float: right'
+						ng-show="blog.usersMarkedFavourites.indexOf(userName) > -1"
+						src='images/fav-icon-selected.png' ng-click="setUnFavourite($index)" />
+					<img style='float: right' title='Mark Favourite'
+						ng-show='blog.usersMarkedFavourites.indexOf(userName) < 0 || blog.usersMarkedFavourites == null'
+						src="images/fav-icon-unselected.png" ng-click="setFavourite($index)" />
+					<span>{{ blog.createdDate | date : "MMMM d, y HH:mm:ss a" }}</span>
+					<p>{{blog.blogContent}}</p>
+					Leave a comment:
+					<textarea id="comment-{{$index}}" rows=5 cols=40></textarea>
+					<br>
+					<br> <a id='btn-{{$index}}' class='loginButton'
+						ng-click='postComment($index)'>Submit</a>
+					<h3>Comments</h3>
+					<div ng-repeat='comment in blog.comments'>
+						<br />{{ comment.commentDate | date : "MMMM d, y HH:mm:ss a" }} |
+						{{comment.commentBy}} | {{comment.comment}}
+					</div>
+					<hr />
+				</div>

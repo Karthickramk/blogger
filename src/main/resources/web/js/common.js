@@ -1,18 +1,334 @@
 var userName = localStorage.getItem("userName");
 var token = localStorage.getItem("token");
-$.ajaxSetup({
-
-    beforeSend: function (xhr)
-    {
-       xhr.setRequestHeader("X-Authorization","Bearer "+token);        
-    },
-    error:function(x,e) {
-	    if(x.status==401) {
-	    	window.location = "index.html";
+var bloggerModule = angular.module("BloggerHome", [ 'ngRoute' ]);
+bloggerModule.factory('httpRequestInterceptor', function () {
+	  return {
+	    request: function (config) {
+	      config.headers['X-Authorization'] = "Bearer "+token;
+	      return config;
 	    }
-  }
+	  };
 });
-var userName = readCookie('username');
+
+bloggerModule.config(function ($httpProvider) {
+	  $httpProvider.interceptors.push('httpRequestInterceptor');
+});
+bloggerModule.controller("LoginController",function($scope,BloggerHomeService,$location){
+	$scope.login = function(){
+		BloggerHomeService.login($scope.loginDetails).then(function(){
+			data = BloggerHomeService.getResponseMessage();
+			if(data == false){
+				alert("Invalid user name or password");
+			}
+			else{
+				localStorage.setItem("token", data);
+				localStorage.setItem("userName", $("#userName").val());
+				window.location="home.html#/home/all";
+			}
+		});
+	};
+});
+bloggerModule.controller("UserRegisterController",function($scope,BloggerHomeService,$location){
+	$scope.createProfile = function(){
+		user = $scope.user;
+		if($scope.user.password != $scope.confirm_password){
+			alert("Password and confirm password do not match.")
+			return;
+		}
+		BloggerHomeService.createProfile(user).then(function(){
+			msg = BloggerHomeService.getResponseMessage();
+			if(msg == 'true' || msg == true){
+	    		alert("Profile created Successfully");
+	    		window.location="index.html";
+	    	}
+	    	else if(msg == 'false'){
+	    		alert("Profile creation failed. Please retry after sometime");
+	    	}
+	    	else{
+	    		alert(msg);
+	    	}
+		});
+	};
+	$scope.cancelRegister = function(){
+		window.location="index.html";
+	};
+});
+bloggerModule.controller("BlogContentController", function($scope,$route,BloggerHomeService,$location) {
+	$scope.blogs = BloggerHomeService.listAllBlogs();
+});
+bloggerModule.controller("BloggerMainController", function($scope,$route,$routeParams,BloggerHomeService,$location) {
+	$scope.userName = localStorage.getItem("userName");
+	if($routeParams.view == 'view'){
+		BloggerHomeService.populateTags().then(function(){
+			availableTags = [];
+			data = BloggerHomeService.getResponseMessage();
+			$scope.tags = data.tags;;
+		});
+		BloggerHomeService.loadProfile(userName).then(function(){
+			$scope.user = BloggerHomeService.getResponseMessage();
+			$scope.confirm_password = $scope.user.password;
+		});
+	}
+	else if ($routeParams.search == 'all') {
+		BloggerHomeService.loadAllBlogs().then(function(){
+			$scope.blogs = BloggerHomeService.listAllBlogs();
+		});
+	}
+	else if($routeParams.search == 'search'){
+		BloggerHomeService.searchBlog($routeParams.id).then(function(){
+			$scope.blogs = BloggerHomeService.listAllBlogs();
+		});
+	}
+	else if($routeParams.search == 'id'){
+		BloggerHomeService.getFavBlogById($routeParams.id).then(function(){
+			$scope.blogs = BloggerHomeService.listAllBlogs();
+		});
+	}
+	$scope.reloadBlogs = function(){
+		BloggerHomeService.loadAllBlogs().then(function(){
+			$scope.blogs = BloggerHomeService.listAllBlogs();
+		});
+	};
+	
+	$scope.postComment = function(index){
+		BloggerHomeService.postComment(index).then(function(){
+			$scope.reloadBlogs();
+		});
+	};
+	
+	$scope.setFavourite = function(index){
+		BloggerHomeService.setFavouriteApi(index).then(function(){
+			location.reload();
+		});
+	};	
+	$scope.setUnFavourite = function(index){
+		BloggerHomeService.setUnFavouriteApi(index).then(function(){
+			location.reload();
+		});
+	};	
+	BloggerHomeService.loadFavBlogs().then(function(){
+		$scope.favBlogs = BloggerHomeService.listFavBlog();
+	});
+	$scope.showBlogContent = function(index){
+		BloggerHomeService.getFavBlogById(index).then(function(){
+			$scope.blogs = BloggerHomeService.listAllBlogs();
+		});
+	};
+	BloggerHomeService.loadMessage().then(function(){
+		$scope.messages = BloggerHomeService.listMessage();
+	});
+	$scope.goToPage = function(page){
+		window.location=page;
+	};
+	$scope.logout = function(){
+		localStorage.clear();
+		window.location="index.html";
+	};
+	$scope.postMessage = function(){
+		if (!window.WebSocket) {
+	         return;
+	     }
+	     if (socket.readyState == WebSocket.OPEN) {
+	    	 var data = {};
+	 		data["messageBy"] = userName;
+	 		data["message"] = document.getElementById("message").value
+	        socket.send(JSON.stringify(data));
+	 		document.getElementById("message").value = "";
+	     } else {
+	         alert("The socket is not open.");
+	     }
+	};
+	$scope.searchBlog = function(input){
+		BloggerHomeService.searchBlog(input).then(function(){
+			$scope.blogs = BloggerHomeService.listAllBlogs();
+		});
+	};
+	$scope.updateProfile = function(){
+		user = $scope.user;
+		if($scope.user.password != $scope.confirm_password){
+			alert("Password and confirm password do not match.")
+			return;
+		}
+		BloggerHomeService.updateProfile(user).then(function(){
+			msg = BloggerHomeService.getResponseMessage();
+			if(msg == 'true' || msg == true){
+	    		alert("Profile updated Successfully");
+	    		window.location="home.html#/home/all";
+	    	}
+	    	else if(msg == 'false' ||  msg == false){
+	    		alert("Profile creation failed. Please retry after sometime");
+	    	}
+	    	else{
+	    		alert(msg);
+	    	}
+		});
+	};
+	$scope.cancel = function(){
+		window.location="home.html#/home/all";
+	};
+	$scope.createBlog = function(){
+		$scope.blog.tags = $scope.blog.tags.split(",")
+		blog = $scope.blog;
+		BloggerHomeService.createBlog(blog).then(function(){
+			window.location="home.html#/home/all";
+		});
+	};
+	if (window.WebSocket) {
+		var l = window.location;
+	    url =  ((l.protocol === "https:") ? "wss://" : "ws://") + l.host +  "/chat";
+	    socket = new WebSocket(url);
+	    socket.onmessage = function(event) {
+	    	BloggerHomeService.loadMessage().then(function(){
+	    		location.reload();
+	    	});
+	    }
+	    socket.onopen = function(event) {
+	    };
+	    socket.onclose = function(event) {
+	    };
+	} else {
+	    alert("Your browser does not support Websockets. (Use Chrome)");
+	}
+});
+bloggerModule.service('BloggerHomeService', function($http){
+	var blogData = [];
+	var favblogData = [];
+	var searchblogData = [];
+	var message = [];
+	var responseMsg;
+	this.login = function(loginDetails){
+		var promise = $http.post('/unprotected/login',loginDetails).success(function(response){
+			responseMsg = response;
+		 });
+		return promise;
+	};
+	this.loadAllBlogs = function(){
+		var promise = $http.get('/api/blog').success(function(data){
+			blogData = data;
+		});
+		return promise;
+	};
+	this.setFavouriteApi = function(index){
+		var data = {};
+		data['id'] = document.getElementById("blogId-"+index).value;
+		data['userName'] = userName;
+		var promise = $http.put('/api/blog/setFav',data).success(function(data){
+		});
+		return promise;
+	};
+	this.setUnFavouriteApi = function(index){
+		var data = {};
+		data['id'] = document.getElementById("blogId-"+index).value;
+		data['userName'] = userName;
+		var promise = $http.put('/api/blog/setUnFav',data).success(function(data){
+		});
+		return promise;
+	};
+	this.loadFavBlogs = function(){
+		var promise = $http.get('/api/blog/getFav/'+userName).success(function(data){
+			favblogData = data;
+		});
+		return promise;
+	};
+	this.getFavBlogById = function(index){
+		var id = document.getElementById("fav-"+index).value;
+		var promise = $http.get('/api/blog/id/'+id).success(function(data){
+			blogData = [];
+			blogData.push(data);
+		});
+		return promise;
+	};
+	this.listFavBlog = function(){
+		return favblogData;
+	};
+	this.loadMessage = function(){
+		var promise = $http.get('/api/messages').success(function(data){
+			message = data;
+		});
+		return promise;
+	};
+	this.listMessage = function(){
+		return message;
+	};
+	this.postComment = function(index){
+		 var data = {};
+		 var comment = $("#comment-"+index).val();
+		 data['comment'] = comment;
+		 data['userName'] = userName;
+		 data['id'] = $("#blogId-"+index).val();
+		 var promise = $http.put('/api/blog',data).success(function(response){
+			message = response;
+		 });
+		 return promise;
+	};
+	this.postMessage = function(){
+		var data = {};
+		data["messageBy"] = userName;
+		data["message"] = $("#message").val();
+		var promise = $http.post('/api/messages',data).success(function(response){
+			message.push(response);
+		 });
+		return promise;
+	};
+	this.searchBlog = function(input){
+		var tagUrl = '/api/tag/blog/'+input;
+		var promise = $http.get(tagUrl).success(function(data){
+			blogData = data;
+		});
+		return promise;
+	};
+	this.listAllBlogs = function(){
+		return blogData;
+	};
+	this.updateProfile = function(user){
+		var promise = $http.put("/api/user/info",user).success(function(data){
+			responseMsg = data;
+		});
+		return promise;
+	};
+	this.getResponseMessage = function(){
+		return responseMsg;
+	};
+	this.createProfile = function(user){
+		var promise = $http.post("/unprotected/register",user).success(function(data){
+			responseMsg = data;
+		});
+		return promise;
+	};
+	this.createBlog = function(blog){
+		var promise = $http.post("/api/blog",blog).success(function(data){
+			responseMsg = data;
+		});
+		return promise;
+	};
+	this.loadProfile = function(userName){
+		var promise = $http.get('/api/user/info/'+userName).success(function(data){
+			responseMsg = data;
+		});
+		return promise;
+	};
+	this.populateTags = function(){
+		var promise = $http.get('/unprotected/tags').success(function(data){
+			responseMsg = data;
+		});
+		return promise;
+	}
+});
+bloggerModule.config(function($routeProvider) {
+	$routeProvider.when('/home/:search/:id', {
+		templateUrl : 'blogContent.html',
+		controller : 'BloggerMainController'
+	}).when('/home/:search', {
+		templateUrl : 'blogContent.html',
+		controller : 'BloggerMainController'
+	}).when('/new', {
+		templateUrl : 'new.html',
+		controller : 'BloggerMainController'
+	}).when('/profile/:view', {
+		templateUrl : 'profile.html',
+		controller : 'BloggerMainController'
+	});
+});
 function readCookie(name) {
 	  var nameEQ = name + "=";
 	  var ca = document.cookie.split(';');
@@ -23,327 +339,7 @@ function readCookie(name) {
 	  }
 	  return null;
 }
-function onlyUnique(value, index, self) { 
-    return self.indexOf(value) === index;
-}
 
-function postMessage(){
-	var data = {};
-	data["messageBy"] = userName;
-	data["message"] = $("#message").val();
-	$.ajax({
-		url : '/api/messages',
-		type : 'post',
-		data: JSON.stringify(data),
-		accepts: {
-	        text: "application/json"
-	    },
-		success:function( jsonResponse ) {
-			data = JSON.parse(jsonResponse);
-			html = "<p><u>"+data.messageBy+" | "+ moment(new Date(data.messageDate)) +"</u><br />"+data.message+"</p>"
-			$("#messageContainer").append(html);
-			$("#message").val("");
-		}
-	});
-}
-function postComment(index){
-	 var data = {};
-	 var comment = $("#comment-"+index).val();
-	 data['comment'] = comment;
-	 data['userName'] = userName;
-	 data['id'] = $("#blogId-"+index).val();
-	 $.ajax({
-		url : '/api/blog',
-		type : 'PUT',
-		data: JSON.stringify(data),
-		accepts: {
-	        text: "application/json"
-	    },
-		success:function( msg ) {
-			window.location="home.html";
-		}
-	 });
-}
-function buildBlogContent(data){
-	$("#blogContent").html("");
-	$.each(data, function(index) {
-		html = "<div class='blogbg'><input type='hidden' id='blogId-"+index+"' value='"+data[index]._id+"'/><div style='font-weight: bold; font-size: 23px;'>"+data[index].title+"</div>";
-		if($.inArray(userName, data[index].usersMarkedFavourites) > -1){
-			html = html + "<img title='Mark Un Favourite' style='float:right' src='images/fav-icon-selected.png' onclick='setUnFavourite("+index+")'/>";
-		}
-		else{
-			html = html + "<img style='float:right' title='Mark Favourite' src='images/fav-icon-unselected.png' onclick='setFavourite("+index+")'/>";
-		}
-		html = html+"<span>"+moment(new Date(data[index].createdDate)).format('MMMM Do YYYY, h:mm:ss a')+"</span>"+
-				"<p>"+data[index].blogContent+"</p> Leave a comment: <textarea id='comment-"+index+"' rows=5 cols=40></textarea><br><br><a id='btn-"+index+"' class='loginButton' onclick='javascript:postComment("+index+")'>Submit</a>";
-				
-		comment_data = data[index].comments;
-		$.each(comment_data, function(comment_index) {
-			if(comment_index == 0){
-				html = html+"<h3>Comments</h3>";
-			}
-			html = html+"<br/>"+moment(new Date(comment_data[comment_index].commentDate)).format('MMMM Do YYYY, h:mm:ss a')+" | "+comment_data[comment_index].commentBy+" | "+comment_data[comment_index].comment;
-		});
-		html = html+ "<hr/>"
-		$("#blogContent").append(html);    
-    });
-}
-
-function createBlog(){
-	var data = {};
-	 var tags = $("#tags").val().split(',');
-    data["title"] = $("#title").val();
-    data["blogContent"] = $("#post").val();
-    data["tags"] = tags;
-	$.ajax({
-		url : '/api/blog',
-		type : 'POST',
-		data: JSON.stringify(data),
-		accepts: {
-	        text: "application/json"
-	    },
-		success:function( msg ) {
-			window.location="home.html";
-		}
-	});
-}
-function cancel(){
-	 window.location="home.html";
-}
-function cancelRegister(){
-	window.location="index.html";
-}
-function updateProfile(){
-	var data = {};
-	if($('#confirm_password').val() != $('#password').val()){
-		alert("Password and confirm password do not match.")
-		return;
-	}
-	$.each($("#profile").serializeArray(), function(_, key) {
-		 if(key.name != 'confirm_password'){
-	  		 if(key.name == 'interest'){
-	  			data[key.name] = $('select#interest').val();
-	  		 }
-	  		 else{
-		    	 if (data.hasOwnProperty(key.name)) {
-		  			data[key.name] = $.makeArray(data[key.name]);
-		  			data[key.name].push(key.value);
-		  		  }
-		  		  else {
-		  			data[key.name] = key.value;
-		  		  }
-	  		 }
-		 }
-		 
-		});
-	$.ajax({
-        url: '/api/user/info',
-        dataType: 'text',
-        type: 'PUT',
-        accepts: {
-	        text: "application/json"
-	    },
-        success: function (msg) {
-        	if(msg == 'true'){
-        		alert("Profile updated Successfully");
-        		window.location="home.html";
-        	}
-        	else if(msg == 'false'){
-        		alert("Profile update failed. Please retry after sometime");
-        	}
-        	else{
-        		alert(msg);
-        	}
-        },
-        error: function (textStatus, errorThrown) {
-        	alert(errorThrown);
-        },
-        data: JSON.stringify(data)
-    });
-}
-function createProfile(){
-	var data = {};
-	if($('#confirm_password').val() != $('#password').val()){
-		alert("Password and confirm password do not match.")
-		return;
-	}
-	$.each($("#registerForm").serializeArray(), function(_, key) {
-		 if(key.name != 'confirm_password'){
-	  		 if(key.name == 'interest'){
-	  			data[key.name] = $('select#interest').val();
-	  		 }
-	  		 else{
-		    	 if (data.hasOwnProperty(key.name)) {
-		  			data[key.name] = $.makeArray(data[key.name]);
-		  			data[key.name].push(key.value);
-		  		  }
-		  		  else {
-		  			data[key.name] = key.value;
-		  		  }
-	  		 }
-		 }
-	});
-	$.ajax({
-        url: '/unprotected/register',
-        type: 'POST',
-        dataType: 'text',
-	    data: JSON.stringify(data),
-        success:function(msg) {
-        	if(msg == 'true'){
-        		alert("Profile created Successfully");
-        		window.location="index.html";
-        	}
-        	else if(msg == 'false'){
-        		alert("Profile creation failed. Please retry after sometime");
-        	}
-        	else{
-        		alert(msg);
-        	}
-        },
-        error: function (textStatus, errorThrown) {
-        	alert(errorThrown);
-        }
-        
-    });
-}
-$(document).ready(function() {
-	$("#username").text(userName);
-});
-function setFavourite(index){
-	var data = {};
-	data['id'] = $("#blogId-"+index).val();
-	data['userName'] = userName;
-	$.ajax({
-		url : '/api/blog/setFav',
-		type : 'PUT',
-		data: JSON.stringify(data),
-		accepts: {
-			
-			
-			
-	        text: "application/json"
-	    },
-		success:function( msg ) {
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			window.location="home.html";
-		}
-	 });
-	
-}
-function setUnFavourite(index){
-	var data = {};
-	data['id'] = $("#blogId-"+index).val();
-	data['userName'] = userName;
-	$.ajax({
-		url : '/api/blog/setUnFav',
-		type : 'PUT',
-		data: JSON.stringify(data),
-		accepts: {
-	        text: "application/json"
-	    },
-		success:function( msg ) {
-			window.location="home.html";
-		}
-	 });
-}
-$("#search").click(function() {
-	var tag = '/api/tag/blog/'+$("#search_input").val();
-	$.ajax({
-		url : tag,
-		type : 'get',
-		accept : 'application/json',
-		success : function(data) {
-			buildBlogContent(data);
-		}
-	});
-});
-function showBlogContent(index){
-	var id = $("#fav-"+index).val();
-	var tag = '/api/blog/id/'+id
-	$.ajax({
-		url : tag,
-		type : 'get',
-		accept : 'application/json',
-		success : function(data) {
-			popuateBlogContent(data);
-		}
-	});
-}
 function invite(){
 	var emailIds = $("invite-id").val();
-}
-function popuateBlogContent(data){
-	$("#blogContent").html("");
-	html = "<div class='blogbg'><input type='hidden' id='blogId-1' value='"+data._id+"'/><div style='font-weight: bold; font-size: 23px;'>"+data.title+"</div>";
-	if($.inArray(userName, data.usersMarkedFavourites) > -1){
-		html = html + "<img title='Mark Un Favourite' style='float:right' src='images/fav-icon-selected.png' onclick='setUnFavourite(1)'/>";
-	}
-	else{
-		html = html + "<img style='float:right' title='Mark Favourite' src='images/fav-icon-unselected.png' onclick='setFavourite(1)'/>";
-	}
-	html = html+"<span>"+moment(new Date(data.createdDate)).format('MMMM Do YYYY, h:mm:ss a')+"</span>"+
-			"<p>"+data.blogContent+"</p> Leave a comment: <textarea id='comment-1' rows=5 cols=40></textarea><br><br><a id='btn-1' class='loginButton' onclick='javascript:postComment(1)'>Submit</a>";
-			
-	comment_data = data.comments;
-	$.each(comment_data, function(comment_index) {
-		if(comment_index == 0){
-			html = html+"<h3>Comments</h3>";
-		}
-		html = html+"<br/>"+moment(new Date(comment_data[comment_index].commentDate)).format('MMMM Do YYYY, h:mm:ss a')+" | "+comment_data[comment_index].commentBy+" | "+comment_data[comment_index].comment;
-	});
-	html = html+ "<hr/>"
-	$("#blogContent").append(html);    
-}
-
-
-function logout(){
-	localStorage.clear();
-	deleteCookie('userName');
-	deleteCookie('loginToken');
-	
-}
-function deleteCookie(name){
-    document.cookie = name + '=deleted;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }

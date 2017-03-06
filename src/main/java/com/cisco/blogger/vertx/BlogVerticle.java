@@ -1,19 +1,16 @@
 package com.cisco.blogger.vertx;
 
-import io.netty.handler.codec.http.cookie.Cookie;
-import io.netty.handler.codec.http.cookie.DefaultCookie;
-import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,11 +53,7 @@ public class BlogVerticle extends AbstractVerticle {
 				JsonObject obj = new JsonObject(rctx.getBodyAsJson().toString());
 				String userName = obj.getString("userName");
 				logger.info("userName"+userName);		
-				List<Cookie> cookies = new ArrayList<Cookie>();
-				final Cookie cookie = new DefaultCookie("username", userName);
-				cookie.setPath("/");
-				cookies.add(cookie);
-				rctx.response().setStatusCode(200).putHeader("set-cookie", ServerCookieEncoder.LAX.encode(cookies)).putHeader("content-type", "application/json; charset=utf-8")
+				rctx.response().setStatusCode(200).putHeader("content-type", "application/json; charset=utf-8")
 				.end(r.result().body().toString());
 			});
 		});
@@ -224,7 +217,21 @@ public class BlogVerticle extends AbstractVerticle {
 		  }
 		});
 		
-		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("http.port", 8080),
+		vertx.createHttpServer().requestHandler(router::accept).websocketHandler(new Handler<ServerWebSocket>() {
+			public void handle(final ServerWebSocket ws) {
+		    	  if (ws.path().equals("/chat")) {
+		    		  System.out.println("message recieved");
+		    		  ws.handler(new Handler<Buffer>() {
+		    			  public void handle(Buffer data){
+		    				  System.out.println("message recieved"+data.toString());
+		    				  vertx.eventBus().send("com.cisco.blogger.addMessages",data.toString(), r -> {
+		    					  ws.writeFinalTextFrame(r.result().body().toString());
+		    					});
+		    			  }
+					});
+			       }
+		      }
+		    }).listen(config().getInteger("http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
 						future.complete();

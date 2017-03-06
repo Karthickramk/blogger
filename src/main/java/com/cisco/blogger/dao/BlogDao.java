@@ -89,8 +89,6 @@ public class BlogDao extends BasicDAO<Blog, Integer> {
 	
 	public JsonObject getUniqueTags(){
 		JsonObject obj = new JsonObject();
-		
-		logger.info("dsfdskfdsfdsnf");
 		Sort s = new Sort("createdDate",-1);
 		List<Blog> blogs = createQuery().order(s).asList();
 		Stream<Blog> stream = blogs.stream();

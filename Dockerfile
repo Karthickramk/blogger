@@ -1,15 +1,27 @@
-FROM ubuntu
-MAINTAINER your@email.com
+#docker build -f Dockerfile -t blog:v1
+FROM debian:jessie
+MAINTAINER YOUR NAME @ Cisco CMAD program
+
+# Install dependencies
+RUN \
+apt-get update && \
+apt-get install -y curl wget software-properties-common
+
+# Install JDK 8 - TODO change the name of the gz
+ADD jdk-8u112-linux-x64.tar.gz .
+ADD blogger-0.0.1-SNAPSHOT-fat.jar .
 
 RUN \
-   apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-   echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list && \
-   apt-get update && \
-   apt-get install -y mongodb-org
+mkdir /opt/jdk1.8.0_112 && \
+mv ./jdk1.8.0_112 /opt && \
+update-alternatives --install "/usr/bin/java" "java" "/opt/jdk1.8.0_112/bin/java" 1 && \
+update-alternatives --install "/usr/bin/javac" "javac" "/opt/jdk1.8.0_112/bin/javac" 1
 
-VOLUME ["/data/db"]
-WORKDIR /data
+# Define commonly used JAVA_HOME variable - TODO update the proper JDK name
+ENV JAVA_HOME /opt/jdk1.8.0_112
 
-EXPOSE 27017
+#Adding the JAR file
+ADD blogger-0.0.1-SNAPSHOT-fat.jar /opt
 
-CMD ["mongod"]
+# Launch your app using the sample below - TODO
+CMD ["java -jar /opt/blogger-0.0.1-SNAPSHOT-fat.jar", "run"]
