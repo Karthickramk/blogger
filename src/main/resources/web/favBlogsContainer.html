@@ -1,0 +1,7 @@
+<h2>Favorite Posts</h2>
+<ul>
+	<li ng-repeat='blog in favBlogs track by $index'>
+		<a href='#home/id/{{$index}}'>
+		<input type='hidden' id='fav-{{$index}}' value='{{blog._id}}'/>{{blog.title}}</a>
+	</li>
+</ul>

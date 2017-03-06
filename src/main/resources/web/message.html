@@ -1,0 +1,9 @@
+<h2>Messages</h2>
+<div id="messageContainer">
+	<p ng-repeat='msg in messages'>
+		<u>{{msg.messageBy}} | {{ msg.messageDate | date : "MMMM d, y HH:mm:ss a" }}</u><br />{{msg.message}}
+	</p>
+</div>
+<hr /> <br />
+<textarea id="message" rows="10" cols="50" ng-model="chatMsg"/><br /><br />
+<a id="postMessage" ng-click="postMessage()" class="loginButton">Post Message</a>
