@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.http.ServerWebSocket;
@@ -11,6 +12,13 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+import io.vertx.ext.web.handler.sockjs.BridgeOptions;
+import io.vertx.ext.web.handler.sockjs.PermittedOptions;
+import io.vertx.ext.web.handler.sockjs.SockJSHandler;
+
+import java.text.DateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,7 +232,33 @@ public class BlogVerticle extends AbstractVerticle {
 		    ctx.next();
 		  }
 		});
-		
+		BridgeOptions opts = new BridgeOptions().addInboundPermitted(
+				new PermittedOptions().setAddress("chat.to.server"))
+				.addOutboundPermitted(
+						new PermittedOptions().setAddress("chat.to.client"));
+
+		// Create the event bus bridge and add it to the router.
+		SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
+		router.route("/chat/*").handler(ebHandler);
+
+		EventBus eb = vertx.eventBus();
+
+		// Register to listen for messages coming IN to the server
+		eb.consumer("chat.to.server")
+				.handler(message -> {
+					// Create a timestamp string
+						String timestamp = DateFormat.getDateTimeInstance(
+								DateFormat.SHORT, DateFormat.MEDIUM).format(
+								Date.from(Instant.now()));
+						// Send the message back out to all clients with the
+						// timestamp prepended.
+						eb.publish("chat.to.client",
+								timestamp + ": " + message.body().toString());
+						logger.info("Karthick"+message.body().toString());
+						vertx.eventBus().send("com.cisco.blogger.addMessages",message.body().toString(), r -> {
+							//rctx.response().setStatusCode(200).end(r.result().body().toString());
+						});
+					});
 		vertx.createHttpServer().requestHandler(router::accept).websocketHandler(new Handler<ServerWebSocket>() {
 			public void handle(final ServerWebSocket ws) {
 		    	  if (ws.path().equals("/chat")) {
