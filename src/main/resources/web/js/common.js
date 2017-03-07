@@ -124,20 +124,6 @@ bloggerModule.controller("BloggerMainController", function($scope,$route,$routeP
 		localStorage.clear();
 		window.location="index.html";
 	};
-	$scope.postMessage = function(){
-		if (!window.WebSocket) {
-	         return;
-	     }
-	     if (socket.readyState == WebSocket.OPEN) {
-	    	 var data = {};
-	 		data["messageBy"] = userName;
-	 		data["message"] = document.getElementById("message").value
-	        socket.send(JSON.stringify(data));
-	 		document.getElementById("message").value = "";
-	     } else {
-	         alert("The socket is not open.");
-	     }
-	};
 	$scope.searchBlog = function(input){
 		BloggerHomeService.searchBlog(input).then(function(){
 			$scope.blogs = BloggerHomeService.listAllBlogs();
@@ -173,22 +159,24 @@ bloggerModule.controller("BloggerMainController", function($scope,$route,$routeP
 			window.location="home.html#/home/all";
 		});
 	};
-	if (window.WebSocket) {
-		var l = window.location;
-	    url =  ((l.protocol === "https:") ? "wss://" : "ws://") + l.host +  "/chat";
-	    socket = new WebSocket(url);
-	    socket.onmessage = function(event) {
-	    	BloggerHomeService.loadMessage().then(function(){
+	var l = window.location;
+    url =  l.protocol + "//" + l.host +  "/chat";
+	var eb = new EventBus(url);
+
+	eb.onopen = function() {
+		eb.registerHandler("chat.to.client", function(err, msg) {
+			BloggerHomeService.loadMessage().then(function(){
 	    		location.reload();
 	    	});
-	    }
-	    socket.onopen = function(event) {
-	    };
-	    socket.onclose = function(event) {
-	    };
-	} else {
-	    alert("Your browser does not support Websockets. (Use Chrome)");
-	}
+		});
+	};
+	$scope.postMessage = function() {
+		var data = {};
+		data["messageBy"] = userName;
+		data["message"] = document.getElementById("message").value
+		eb.publish("chat.to.server", JSON.stringify(data));
+	};
+	
 });
 bloggerModule.service('BloggerHomeService', function($http){
 	var blogData = [];
