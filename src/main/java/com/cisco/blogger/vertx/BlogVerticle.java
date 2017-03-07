@@ -20,12 +20,20 @@ public class BlogVerticle extends AbstractVerticle {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
+	int port;
+	
+	public BlogVerticle(int port) {
+		super();
+		this.port = port;
+		
+	}
 	
 	public BlogVerticle(ApplicationContext context) {
 	}
 
 	@Override
 	public void start(Future<Void> future) throws Exception {
+		super.start();
 		logger.info("starting...");
 		Router router = Router.router(vertx);
 		
@@ -231,7 +239,7 @@ public class BlogVerticle extends AbstractVerticle {
 					});
 			       }
 		      }
-		    }).listen(config().getInteger("http.port", 8080),
+		    }).listen(port,//listen(config().getInteger("http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
 						future.complete();
